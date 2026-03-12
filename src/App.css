@@ -1,0 +1,493 @@
+header {
+    background-color: #1E2026;
+    border-bottom: 1px solid #2B2F36;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F0B90B;
+    transition: transform 0.2s ease, text-shadow 0.2s ease;
+    cursor: default;
+}
+
+.logo:hover {
+    transform: scale(1.08);
+    text-shadow: 0 0 12px rgba(240, 185, 11, 0.6);
+}
+
+nav ul {
+    display: flex;
+    gap: 28px;
+}
+
+nav ul li a {
+    transition: color 0.2s ease;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #F0B90B;
+    border-radius: 2px;
+    transition: width 0.25s ease;
+}
+
+nav ul li a:hover {
+    color: #F0B90B;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.botones-header {
+    display: flex;
+    gap: 12px;
+}
+
+.boton-borde {
+    padding: 8px 20px;
+    border: 1px solid #F0B90B;
+    border-radius: 20px;
+    color: #F0B90B;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-borde:hover {
+    transform: scale(1.05);
+    background-color: rgba(240, 185, 11, 0.1);
+    box-shadow: 0 0 10px rgba(240, 185, 11, 0.3);
+}
+
+.boton-amarillo {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.boton-amarillo:hover {
+    transform: scale(1.05);
+    background-color: #f8cc3a;
+    box-shadow: 0 4px 16px rgba(240, 185, 11, 0.45);
+}
+
+.barra-precios {
+    background-color: #161A1E;
+    border-bottom: 1px solid #2B2F36;
+    padding: 10px 40px;
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+}
+
+.barra-precios div {
+    display: flex;
+    flex-direction: column;
+    min-width: 110px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.barra-precios div:hover {
+    background-color: #1E2026;
+    transform: scale(1.04);
+}
+
+.subida { color: #03A66D; font-size: 0.8rem; }
+.bajada { color: #CF304A; font-size: 0.8rem; }
+
+.hero {
+    padding: 80px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.hero h1 span {
+    color: #F0B90B;
+    text-shadow: 0 0 20px rgba(240, 185, 11, 0.3);
+}
+
+.hero p {
+    color: #848E9C;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 460px;
+}
+
+.hero-botones {
+    display: flex;
+    gap: 16px;
+}
+
+.boton-grande {
+    padding: 14px 36px;
+    border: none;
+    border-radius: 30px;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 4px 18px rgba(240, 185, 11, 0.35);
+}
+
+.boton-grande:hover {
+    transform: scale(1.06);
+    background-color: #f8cc3a;
+    box-shadow: 0 6px 24px rgba(240, 185, 11, 0.55);
+}
+
+.boton-grande-borde {
+    padding: 14px 36px;
+    border: 1px solid #F0B90B;
+    border-radius: 30px;
+    background: transparent;
+    color: #F0B90B;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-grande-borde:hover {
+    transform: scale(1.06);
+    background-color: rgba(240, 185, 11, 0.1);
+    box-shadow: 0 4px 18px rgba(240, 185, 11, 0.25);
+}
+
+aside {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 24px;
+    min-width: 300px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+aside:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    transform: translateY(-4px);
+}
+
+aside h3 {
+    color: #848E9C;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fila-moneda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 8px;
+    border-bottom: 1px solid #2B2F36;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.fila-moneda:hover {
+    background-color: #272B33;
+    transform: scale(1.02);
+}
+
+.fila-moneda:last-child {
+    border-bottom: none;
+}
+
+/* ── TwitterBox ── */
+.twitter-box {
+    max-width: 600px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+}
+
+.twitter-box h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #F0F0F0;
+}
+
+.twitter-composer {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.twitter-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #F0F0F0;
+    font-size: 1rem;
+    resize: none;
+    font-family: inherit;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.twitter-input::placeholder {
+    color: #555C66;
+}
+
+.twitter-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+    border-top: 1px solid #2B2F36;
+    padding-top: 12px;
+}
+
+.twitter-counter {
+    font-size: 0.95rem;
+    color: #848E9C;
+    min-width: 28px;
+    text-align: right;
+}
+
+.twitter-counter--warning {
+    color: #F0B90B;
+}
+
+.twitter-counter--error {
+    color: #CF304A;
+    font-weight: bold;
+}
+
+.twitter-btn {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 20px;
+    background-color: #1DA1F2;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.twitter-btn:hover:not(:disabled) {
+    background-color: #1a8fd1;
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px rgba(29, 161, 242, 0.4);
+}
+
+.twitter-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.twitter-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.twitter-feed-vacio {
+    color: #555C66;
+    font-style: italic;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.twitter-card {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 16px;
+    color: #F0F0F0;
+    font-size: 1rem;
+    line-height: 1.5;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Comentarios ── */
+.comentarios-seccion {
+    max-width: 600px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+}
+
+.comentarios-titulo {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+    color: #F0F0F0;
+}
+
+.comentarios-form {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.comentarios-input {
+    background-color: #0B0E11;
+    border: 1px solid #2B2F36;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #F0F0F0;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.comentarios-input::placeholder {
+    color: #555C66;
+}
+
+.comentarios-textarea {
+    background-color: #0B0E11;
+    border: 1px solid #2B2F36;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #F0F0F0;
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+}
+
+.comentarios-textarea::placeholder {
+    color: #555C66;
+}
+
+.comentarios-btn {
+    align-self: flex-end;
+    padding: 10px 24px;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.comentarios-btn:hover {
+    background-color: #f8cc3a;
+    transform: scale(1.04);
+}
+
+.comentarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.comentario-card {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 16px 20px;
+}
+
+.comentario-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.comentario-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.comentario-autor {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #F0F0F0;
+    margin: 0;
+}
+
+.comentario-fecha {
+    font-size: 0.8rem;
+    color: #848E9C;
+    margin: 2px 0 0;
+}
+
+.comentario-texto {
+    color: #C8CDD6;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+.comentario-like {
+    background: none;
+    border: 1px solid #2B2F36;
+    border-radius: 20px;
+    padding: 4px 14px;
+    color: #848E9C;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.comentario-like:hover {
+    border-color: #F0B90B;
+    color: #F0B90B;
+}

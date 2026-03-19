@@ -2,6 +2,7 @@ import TwitterBox from './TwitterBox';
 import Comentarios from './Comentarios';
 import Carrito from './Carrito';
 import Semaforo from './Semaforo';
+import TodoList from './TodoList';
 
 function Ejercicios() {
   return (
@@ -15,6 +16,7 @@ function Ejercicios() {
         <Semaforo />
         <Comentarios />
         <Carrito />
+        <TodoList />
       </div>
     </main>
   );

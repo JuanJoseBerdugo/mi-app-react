@@ -10,7 +10,6 @@ export default function Semaforo() {
   return (
     <div className="contenedor-semaforo">
       <div className={`caja-luz ${colorLuz}`}>
-        <div className="circulo-brillante"></div>
       </div>
       <button onClick={manejarCiclo}>
         {colorLuz === 'rojo' ? 'Poner Verde' : 'Poner Rojo'}

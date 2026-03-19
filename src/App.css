@@ -630,6 +630,144 @@ aside h3 {
 .carrito-gracias h2 { color: #F0F0F0; margin: 0; }
 .carrito-gracias p { color: #848E9C; margin: 0; }
 
+/*Lista Ordenada*/
+.todo-contenedor {
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.todo-titulo {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    color: #F0F0F0;
+}
+
+.todo-form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.todo-input {
+    padding: 8px 12px;
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 6px;
+    color: #F0F0F0;
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 120px;
+    outline: none;
+}
+
+.todo-input::placeholder {
+    color: #555C66;
+}
+
+.todo-select {
+    padding: 8px 10px;
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 6px;
+    color: #F0F0F0;
+    font-size: 0.95rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.todo_boton_agregar {
+    padding: 8px 16px;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.todo_boton_agregar:hover {
+    background-color: #f8cc3a;
+}
+
+.todo-lista {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.todo-vacio {
+    color: #848E9C;
+    font-style: italic;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 8px;
+    color: #C8CDD6;
+    font-size: 0.95rem;
+}
+
+.todo_boton_eliminar {
+    background: none;
+    border: 1px solid #CF304A;
+    color: #CF304A;
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.todo_boton_eliminar:hover {
+    background-color: #CF304A;
+    color: #fff;
+}
+
+.todo-filtro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    color: #848E9C;
+    font-size: 0.9rem;
+}
+
+.todo-item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.todo-item-texto {
+    color: #F0F0F0;
+    font-size: 0.95rem;
+}
+
+.todo-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: bold;
+}
+
+.badge-trabajo { background-color: #1a3a5c; color: #4da6ff; }
+.badge-estudio { background-color: #2a1a5c; color: #a06eff; }
+.badge-ocio    { background-color: #1a3a2a; color: #3ecf8e; }
+
 /* ── Active nav tab ── */
 .nav-activo {
     color: #F0B90B !important;
@@ -820,4 +958,14 @@ aside h3 {
     .ejercicios-grid {
         grid-template-columns: 1fr;
     }
+}
+
+.feedback {
+  background-color: #2ecc71;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0;
 }

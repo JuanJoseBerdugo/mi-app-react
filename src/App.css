@@ -491,3 +491,333 @@ aside h3 {
     border-color: #F0B90B;
     color: #F0B90B;
 }
+
+/* ── Semaforo ── */
+.contenedor-semaforo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 60px 20px;
+}
+
+.caja-luz {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.caja-luz.rojo {
+    background-color: #CF304A;
+    box-shadow: 0 0 40px rgba(207, 48, 74, 0.6);
+}
+
+.caja-luz.verde {
+    background-color: #03A66D;
+    box-shadow: 0 0 40px rgba(3, 166, 109, 0.6);
+}
+
+.circulo-brillante {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.contenedor-semaforo button {
+    padding: 12px 32px;
+    border: none;
+    border-radius: 20px;
+    background-color: #F0B90B;
+    color: #0B0E11;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.contenedor-semaforo button:hover {
+    transform: scale(1.05);
+    background-color: #f8cc3a;
+}
+
+/* ── Carrito ── */
+.carrito-seccion {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 80px;
+}
+
+.carrito-caja {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    max-width: 460px;
+}
+
+.carrito-titulo {
+    font-size: 1.5rem;
+    color: #F0F0F0;
+    margin: 0 0 4px;
+}
+
+.carrito-hr {
+    border: none;
+    border-top: 1px solid #2B2F36;
+    margin: 16px 0;
+}
+
+.carrito-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.carrito-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px dashed #2B2F36;
+    color: #C8CDD6;
+}
+
+.carrito-item:last-child { border-bottom: none; }
+
+.carrito-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0 20px;
+    font-weight: bold;
+    color: #F0F0F0;
+    border-top: 1px solid #2B2F36;
+    margin-top: 8px;
+}
+
+.carrito-btn-pagar {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: #00BFFF;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.carrito-btn-pagar:hover {
+    background-color: #009fcc;
+    transform: scale(1.02);
+}
+
+.carrito-gracias {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    text-align: center;
+}
+
+.carrito-gracias span { font-size: 3rem; }
+.carrito-gracias h2 { color: #F0F0F0; margin: 0; }
+.carrito-gracias p { color: #848E9C; margin: 0; }
+
+/* ── Active nav tab ── */
+.nav-activo {
+    color: #F0B90B !important;
+}
+
+.nav-activo::after {
+    width: 100% !important;
+}
+
+/* ── Section titles ── */
+.seccion-titulo {
+    font-size: 1.6rem;
+    color: #F0F0F0;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+/* ── CryptoCard ── */
+.cripto-cards-seccion {
+    padding: 60px 40px;
+    background-color: #161A1E;
+}
+
+.cripto-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.crypto-card {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.crypto-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+    border-color: #F0B90B;
+}
+
+.crypto-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.crypto-card-icono {
+    font-size: 1.4rem;
+    background-color: #2B2F36;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.crypto-card-nombre {
+    font-weight: bold;
+    color: #F0F0F0;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.crypto-card-simbolo {
+    color: #848E9C;
+    font-size: 0.8rem;
+    margin: 2px 0 0;
+}
+
+.crypto-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.crypto-card-precio {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #F0F0F0;
+    margin: 0;
+}
+
+/* ── AccordionItem ── */
+.investigacion-seccion {
+    padding: 60px 40px 100px;
+}
+
+.accordion {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.accordion-item {
+    background-color: #1E2026;
+    border: 1px solid #2B2F36;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.accordion-item:hover {
+    border-color: #444C58;
+}
+
+.accordion-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    color: #F0F0F0;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    gap: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.accordion-btn:hover {
+    background-color: #272B33;
+}
+
+.accordion-icono {
+    font-size: 0.8rem;
+    color: #848E9C;
+    transition: transform 0.3s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.accordion-icono.abierto {
+    transform: rotate(180deg);
+    color: #F0B90B;
+}
+
+.accordion-contenido {
+    padding: 0 20px 18px;
+    color: #848E9C;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    animation: fadeIn 0.2s ease;
+}
+
+/* ── Ejercicios page ── */
+.ejercicios-page {
+    padding: 60px 40px;
+}
+
+.ejercicios-header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.ejercicios-header h2 {
+    font-size: 2rem;
+    color: #F0F0F0;
+    margin-bottom: 8px;
+}
+
+.ejercicios-header p {
+    color: #848E9C;
+    font-size: 1rem;
+}
+
+.ejercicios-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .ejercicios-grid {
+        grid-template-columns: 1fr;
+    }
+}

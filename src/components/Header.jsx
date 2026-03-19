@@ -1,15 +1,26 @@
-function Header() {
+function Header({ activeTab, onTabChange }) {
   return (
     <header>
-      <p className="logo">Bernu.ly</p>
+      <p className="logo" onClick={() => onTabChange('mvp')} style={{ cursor: 'pointer' }}>
+        Bernu.ly
+      </p>
 
       <nav>
         <ul>
-          <li><a href="#">Mercados</a></li>
+          <li>
+            <a href="#" className={activeTab === 'mvp' ? 'nav-activo' : ''} onClick={(e) => { e.preventDefault(); onTabChange('mvp'); }}>
+              Mercados
+            </a>
+          </li>
           <li><a href="#">Comprar</a></li>
           <li><a href="#">Trading</a></li>
           <li><a href="#">Futuros</a></li>
           <li><a href="#">Earn</a></li>
+          <li>
+            <a href="#" className={activeTab === 'ejercicios' ? 'nav-activo' : ''} onClick={(e) => { e.preventDefault(); onTabChange('ejercicios'); }}>
+              Ejercicios
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -20,7 +31,5 @@ function Header() {
     </header>
   );
 }
-
-{/*hola*/}
 
 export default Header;

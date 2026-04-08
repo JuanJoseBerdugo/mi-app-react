@@ -1,70 +1,52 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import BarraPrecios from './components/BarraPrecios'
-import Hero from './components/Hero'
-import CryptoCard from './components/CryptoCard'
-import AccordionItem from './components/AccordionItem'
 import Ejercicios from './components/Ejercicios'
-
-const criptos = [
-  { nombre: 'Bitcoin',  simbolo: 'BTC', precio: '$97,432.10', cambio: 2.34,  icono: '₿' },
-  { nombre: 'Ethereum', simbolo: 'ETH', precio: '$3,210.55',  cambio: 1.78,  icono: 'Ξ' },
-  { nombre: 'BNB',      simbolo: 'BNB', precio: '$612.30',    cambio: -0.45, icono: '◆' },
-  { nombre: 'Solana',   simbolo: 'SOL', precio: '$186.74',    cambio: 4.12,  icono: '◎' },
-];
-
-const investigacion = [
-  {
-    pregunta: '¿Qué son las props en React y para qué sirven?',
-    respuesta:
-      'Son objetos que permiten pasar datos desde un componente padre a un componente hijo, funcionando como atributos o parámetros de entrada.',
-  },
-  {
-    pregunta: '¿Qué diferencia hay entre state y props?',
-    respuesta:
-      'Las propiedades son inmutables y pasadas desde un componente padre como argumentos, mientras que el state (estado) es gestionado localmente dentro del propio componente y puede cambiar con el tiempo.',
-  },
-  {
-    pregunta: '¿Por qué React utiliza una arquitectura basada en componentes?',
-    respuesta:
-      'Para dividir interfaces de usuario complejas en piezas pequeñas, independientes y reutilizables. ',
-  },
-];
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import Inicio from './pages/Inicio'
+import Catalogo from './pages/Catalogo'
+import DetalleProducto from './pages/DetalleProducto'
+import Carrito from './pages/Carrito'
+import GuardianRuta from './components/GuardianRuta'
+import StoreLayout from './components/StoreLayout'
+import { CartProvider } from './CartContext'
+import Store from './Store'
 
 function App() {
-  const [tab, setTab] = useState('mvp');
+  const [logeado, setLogeado] = useState(false);
 
   return (
-    <div>
-      <Header activeTab={tab} onTabChange={setTab} />
+    <CartProvider>
+    <BrowserRouter>
+      <Header logeado={logeado} setLogeado={setLogeado} />
       <BarraPrecios />
-      {tab === 'mvp' ? (
-        <main>
-          <Hero />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ejercicios" element={<Ejercicios />} />
+        <Route path="/tienda" element={<Store />} />
 
-          <section className="cripto-cards-seccion">
-            <h2 className="seccion-titulo">Top Criptomonedas</h2>
-            <div className="cripto-cards-grid">
-              {criptos.map((c) => (
-                <CryptoCard key={c.simbolo} {...c} />
-              ))}
-            </div>
-          </section>
+        {/* FakeStore — todas las rutas comparten StoreLayout (MiniCarrito flotante) */}
+        <Route path="/store" element={<StoreLayout />}>
+          <Route index element={<Inicio />} />
+          <Route path="products" element={<Catalogo />} />
+          <Route path="product/:id" element={<DetalleProducto />} />
+          <Route
+            path="cart"
+            element={
+              <GuardianRuta logeado={logeado}>
+                <Carrito />
+              </GuardianRuta>
+            }
+          />
+        </Route>
 
-          <section className="investigacion-seccion">
-            <h2 className="seccion-titulo">📚 Investigación: React</h2>
-            <div className="accordion">
-              {investigacion.map((item, i) => (
-                <AccordionItem key={i} pregunta={item.pregunta} respuesta={item.respuesta} />
-              ))}
-            </div>
-          </section>
-        </main>
-      ) : (
-        <Ejercicios />
-      )}
-    </div>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+    </CartProvider>
   );
 }
 

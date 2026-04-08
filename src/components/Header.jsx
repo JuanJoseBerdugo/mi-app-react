@@ -1,31 +1,43 @@
-function Header({ activeTab, onTabChange }) {
+import { NavLink, Link } from 'react-router-dom';
+
+function Header({ logeado, setLogeado }) {
   return (
     <header>
-      <p className="logo" onClick={() => onTabChange('mvp')} style={{ cursor: 'pointer' }}>
+      <NavLink to="/" className="logo" style={{ textDecoration: 'none' }}>
         Bernu.ly
-      </p>
+      </NavLink>
 
       <nav>
         <ul>
           <li>
-            <a href="#" className={activeTab === 'mvp' ? 'nav-activo' : ''} onClick={(e) => { e.preventDefault(); onTabChange('mvp'); }}>
+            <NavLink to="/" className={({ isActive }) => isActive ? 'nav-activo' : ''} end>
               Mercados
-            </a>
+            </NavLink>
           </li>
-          <li><a href="#">Comprar</a></li>
-          <li><a href="#">Trading</a></li>
-          <li><a href="#">Futuros</a></li>
-          <li><a href="#">Earn</a></li>
+          <li><Link to="/comprar">Comprar</Link></li>
+          <li><Link to="/trading">Trading</Link></li>
+          <li><Link to="/futuros">Futuros</Link></li>
+          <li><Link to="/earn">Earn</Link></li>
           <li>
-            <a href="#" className={activeTab === 'ejercicios' ? 'nav-activo' : ''} onClick={(e) => { e.preventDefault(); onTabChange('ejercicios'); }}>
+            <NavLink to="/ejercicios" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
               Ejercicios
-            </a>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/store" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
+              FakeStore
+            </NavLink>
           </li>
         </ul>
       </nav>
 
       <div className="botones-header">
-        <button className="boton-borde">Iniciar sesión</button>
+        <button
+          className="boton-borde"
+          onClick={() => setLogeado(!logeado)}
+        >
+          {logeado ? 'Cerrar sesión' : 'Iniciar sesión'}
+        </button>
         <button className="boton-amarillo">Registrarse</button>
       </div>
     </header>

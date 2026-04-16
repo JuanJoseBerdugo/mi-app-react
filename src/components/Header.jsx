@@ -1,4 +1,4 @@
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Header({ logeado, setLogeado }) {
   return (
@@ -10,32 +10,13 @@ function Header({ logeado, setLogeado }) {
       <nav>
         <ul>
           <li>
-            <NavLink to="/" className={({ isActive }) => isActive ? 'nav-activo' : ''} end>
-              Mercados
-            </NavLink>
-          </li>
-          <li><Link to="/comprar">Comprar</Link></li>
-          <li><Link to="/trading">Trading</Link></li>
-          <li><Link to="/futuros">Futuros</Link></li>
-          <li><Link to="/earn">Earn</Link></li>
-          <li>
             <NavLink to="/ejercicios" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
               Ejercicios
             </NavLink>
           </li>
           <li>
-            <NavLink to="/store" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
-              FakeStore
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/pokedex" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
-              Pokédex
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/rickandmorty" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
-              Rick &amp; Morty
+            <NavLink to="/mvp" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
+              MVP
             </NavLink>
           </li>
         </ul>

@@ -969,3 +969,581 @@ aside h3 {
   text-align: center;
   margin: 10px 0;
 }
+
+/* ── Landing Page ── */
+.landing-page {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.landing-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.landing-titulo {
+  font-size: 2.8rem;
+  color: #F0F0F0;
+  margin-bottom: 8px;
+}
+
+.landing-titulo span {
+  color: #F0B90B;
+  text-shadow: 0 0 20px rgba(240, 185, 11, 0.3);
+}
+
+.landing-subtitulo {
+  font-size: 1.2rem;
+  color: #848E9C;
+  margin-bottom: 48px;
+}
+
+.landing-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.landing-card {
+  background-color: #1E2026;
+  border: 1px solid #2B2F36;
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-decoration: none;
+  color: #F0F0F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  border-color: #F0B90B;
+}
+
+.landing-card-icono {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.landing-card h2 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.landing-card p {
+  color: #848E9C;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.landing-card-arrow {
+  font-size: 1.4rem;
+  color: #F0B90B;
+  transition: transform 0.2s ease;
+}
+
+.landing-card:hover .landing-card-arrow {
+  transform: translateX(6px);
+}
+
+@media (max-width: 600px) {
+  .landing-cards {
+    grid-template-columns: 1fr;
+  }
+  .landing-titulo {
+    font-size: 2rem;
+  }
+}
+
+/* ── Ejercicios Panel Page ── */
+.ejercicios-panel-page {
+  padding: 48px 40px 80px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ejercicios-panel-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ejercicios-panel-header h2 {
+  font-size: 2rem;
+  color: #F0F0F0;
+  margin-bottom: 8px;
+}
+
+.ejercicios-panel-header p {
+  color: #848E9C;
+  font-size: 1rem;
+}
+
+.ejercicios-panel-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ejercicio-panel-item {
+  background-color: #1E2026;
+  border: 1px solid #2B2F36;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.ejercicio-panel-item:hover {
+  border-color: #444C58;
+}
+
+.ejercicio-panel-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #F0F0F0;
+}
+
+.ejercicio-panel-btn:hover {
+  background-color: #272B33;
+}
+
+.ejercicio-panel-btn--activo {
+  background-color: #272B33;
+  border-bottom: 1px solid #2B2F36;
+}
+
+.ejercicio-panel-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.ejercicio-panel-icono {
+  font-size: 1.8rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2B2F36;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.ejercicio-panel-info h3 {
+  font-size: 1.05rem;
+  color: #F0F0F0;
+  margin: 0 0 4px;
+}
+
+.ejercicio-panel-info p {
+  font-size: 0.85rem;
+  color: #848E9C;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ejercicio-panel-flecha {
+  font-size: 0.75rem;
+  color: #848E9C;
+  transition: transform 0.3s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ejercicio-panel-flecha--abierta {
+  transform: rotate(180deg);
+  color: #F0B90B;
+}
+
+.ejercicio-panel-link {
+  padding: 8px 20px;
+  background-color: rgba(240, 185, 11, 0.15);
+  color: #F0B90B;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.ejercicio-panel-link:hover {
+  background-color: rgba(240, 185, 11, 0.25);
+  transform: scale(1.04);
+}
+
+.ejercicio-panel-contenido {
+  padding: 24px;
+  border-top: 1px solid #2B2F36;
+  animation: fadeIn 0.25s ease;
+}
+
+/* ── NexusCrypto Exercise ── */
+.nexus-wrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  font-family: inherit;
+  background-color: #f0f2f5;
+}
+
+.nexus-header {
+  background-color: #0d1525;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nexus-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.nexus-logo-icono {
+  background-color: #F0B90B;
+  color: #0d1525;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.nexus-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nexus-btn-teoria {
+  padding: 6px 16px;
+  border: 1px solid #F0B90B;
+  border-radius: 20px;
+  background: transparent;
+  color: #F0B90B;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nexus-btn-teoria:hover {
+  background-color: rgba(240, 185, 11, 0.12);
+}
+
+.nexus-usuario {
+  color: #c8d0dc;
+  font-size: 0.88rem;
+}
+
+.nexus-body {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  padding: 24px;
+}
+
+/* Left column */
+.nexus-izquierda {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nexus-saldo-card {
+  background: linear-gradient(135deg, #1a2c50 0%, #0d1b35 100%);
+  border-radius: 16px;
+  padding: 28px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.nexus-saldo-label {
+  font-size: 0.72rem;
+  color: #8fa8c8;
+  letter-spacing: 0.08em;
+  margin: 0 0 10px;
+}
+
+.nexus-saldo-btc {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.nexus-saldo-btc-unit {
+  font-size: 1.1rem;
+  color: #8fa8c8;
+  margin: 4px 0 14px;
+}
+
+.nexus-saldo-sub {
+  font-size: 0.82rem;
+  color: #8fa8c8;
+  margin: 0;
+}
+
+.nexus-saldo-circulo {
+  position: absolute;
+  right: -28px;
+  bottom: -28px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: rgba(240, 185, 11, 0.2);
+  pointer-events: none;
+}
+
+/* Form card */
+.nexus-form-card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+.nexus-form-titulo {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1a1f2e;
+  margin: 0 0 18px;
+}
+
+.nexus-form-group {
+  margin-bottom: 14px;
+}
+
+.nexus-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.nexus-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #1a1f2e;
+  background-color: #f9fafb;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.nexus-input:focus {
+  border-color: #F0B90B;
+  background-color: #fff;
+}
+
+.nexus-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #1a1f2e;
+  background-color: #f9fafb;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.nexus-select:focus {
+  border-color: #F0B90B;
+}
+
+.nexus-error {
+  color: #dc2626;
+  font-size: 0.78rem;
+  margin: -8px 0 10px;
+  background-color: #fef2f2;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border-left: 3px solid #dc2626;
+}
+
+.nexus-btn-ejecutar {
+  width: 100%;
+  padding: 13px;
+  background-color: #F0B90B;
+  color: #1a1f2e;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.nexus-btn-ejecutar:hover {
+  background-color: #f8cc3a;
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px rgba(240, 185, 11, 0.4);
+}
+
+/* Right column — Historial */
+.nexus-derecha {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+.nexus-historial-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nexus-historial-titulo {
+  font-size: 1.05rem;
+  font-weight: bold;
+  color: #1a1f2e;
+  margin: 0;
+}
+
+.nexus-historial-controles {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nexus-input--buscar {
+  width: 200px;
+}
+
+.nexus-btn-limpiar {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nexus-btn-limpiar:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.nexus-historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nexus-historial-vacio {
+  color: #9ca3af;
+  font-style: italic;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 0.9rem;
+}
+
+.nexus-historial-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  animation: fadeIn 0.2s ease;
+}
+
+.nexus-historial-item-izq {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nexus-historial-barra {
+  width: 4px;
+  height: 38px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.nexus-historial-barra--compra {
+  background-color: #F0B90B;
+}
+
+.nexus-historial-barra--venta {
+  background-color: #dc2626;
+}
+
+.nexus-historial-tipo {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a1f2e;
+  margin: 0 0 4px;
+}
+
+.nexus-historial-fecha {
+  font-size: 0.76rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.nexus-historial-monto {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.nexus-historial-monto--compra {
+  color: #16a34a;
+}
+
+.nexus-historial-monto--venta {
+  color: #dc2626;
+}
+
+@media (max-width: 780px) {
+  .nexus-body {
+    grid-template-columns: 1fr;
+  }
+  .nexus-input--buscar {
+    width: 140px;
+  }
+}

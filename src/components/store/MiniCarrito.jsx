@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { CartContext } from '../CartContext';
+import { CartContext } from '../../CartContext';
 
 function MiniCarrito() {
   const [abierto, setAbierto] = useState(false);

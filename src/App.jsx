@@ -2,20 +2,22 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
-import BarraPrecios from './components/BarraPrecios'
-import Ejercicios from './components/Ejercicios'
+import BarraPrecios from './components/mvp/BarraPrecios'
+import Landing from './pages/Landing'
+import EjerciciosPanel from './pages/EjerciciosPanel'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Inicio from './pages/Inicio'
-import Catalogo from './pages/Catalogo'
-import DetalleProducto from './pages/DetalleProducto'
-import Carrito from './pages/Carrito'
-import GuardianRuta from './components/GuardianRuta'
-import StoreLayout from './components/StoreLayout'
+import Inicio from './pages/store/Inicio'
+import Catalogo from './pages/store/Catalogo'
+import DetalleProducto from './pages/store/DetalleProducto'
+import Carrito from './pages/store/Carrito'
+import GuardianRuta from './components/store/GuardianRuta'
+import StoreLayout from './components/store/StoreLayout'
 import { CartProvider } from './CartContext'
 import Store from './Store'
 import Pokedex from './pages/Pokedex'
 import RickAndMorty from './pages/RickAndMorty'
+import NexusCrypto from './pages/NexusCrypto'
 
 function App() {
   const [logeado, setLogeado] = useState(false);
@@ -24,13 +26,15 @@ function App() {
     <CartProvider>
     <BrowserRouter>
       <Header logeado={logeado} setLogeado={setLogeado} />
-      <BarraPrecios />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/ejercicios" element={<Ejercicios />} />
+        {/* Landing — página principal */}
+        <Route path="/" element={<Landing />} />
+
+        {/* Ejercicios — prácticas */}
+        <Route path="/ejercicios" element={<EjerciciosPanel />} />
         <Route path="/tienda" element={<Store />} />
 
-        {/* FakeStore — todas las rutas comparten StoreLayout (MiniCarrito flotante) */}
+        {/* FakeStore — ejercicio con rutas anidadas */}
         <Route path="/store" element={<StoreLayout />}>
           <Route index element={<Inicio />} />
           <Route path="products" element={<Catalogo />} />
@@ -47,6 +51,16 @@ function App() {
 
         <Route path="/pokedex" element={<Pokedex />} />
         <Route path="/rickandmorty" element={<RickAndMorty />} />
+        <Route path="/nexuscrypto" element={<NexusCrypto />} />
+
+        {/* MVP — entregable de criptomonedas */}
+        <Route path="/mvp" element={
+          <>
+            <BarraPrecios />
+            <Home />
+          </>
+        } />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

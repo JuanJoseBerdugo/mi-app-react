@@ -1,0 +1,361 @@
+/* ── Full page layout ── */
+.nx-page {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f2f5;
+}
+
+/* ── Sub-header bar ── */
+.nx-topbar {
+  background-color: #0d1525;
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nx-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+}
+
+.nx-logo-circle {
+  background-color: #F0B90B;
+  color: #0d1525;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.nx-logo-text {
+  letter-spacing: 0.08em;
+}
+
+.nx-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nx-btn-teoria {
+  padding: 7px 18px;
+  border: 1px solid #F0B90B;
+  border-radius: 20px;
+  background: transparent;
+  color: #F0B90B;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nx-btn-teoria:hover {
+  background-color: rgba(240, 185, 11, 0.12);
+}
+
+.nx-usuario {
+  color: #c8d0dc;
+  font-size: 0.88rem;
+}
+
+/* ── Content grid ── */
+.nx-content {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  padding: 36px 48px;
+  flex: 1;
+  align-items: start;
+}
+
+/* ── Left column ── */
+.nx-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Balance card */
+.nx-balance-card {
+  background: linear-gradient(135deg, #1a2c50 0%, #0d1b35 100%);
+  border-radius: 18px;
+  padding: 32px 28px 28px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.nx-balance-label {
+  font-size: 0.72rem;
+  color: #8fa8c8;
+  letter-spacing: 0.1em;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.nx-balance-btc {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.nx-balance-unit {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #cbd8ea;
+  margin: 6px 0 16px;
+}
+
+.nx-balance-sub {
+  font-size: 0.82rem;
+  color: #8fa8c8;
+  margin: 0;
+}
+
+.nx-balance-deco {
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: rgba(240, 185, 11, 0.18);
+  pointer-events: none;
+}
+
+/* Form card */
+.nx-form-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.nx-form-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 22px;
+}
+
+.nx-field {
+  margin-bottom: 16px;
+}
+
+.nx-label {
+  display: block;
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.nx-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #111827;
+  background-color: #f9fafb;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.15s ease;
+}
+
+.nx-input:focus {
+  border-color: #F0B90B;
+  background-color: #ffffff;
+}
+
+.nx-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #111827;
+  background-color: #f9fafb;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.nx-select:focus {
+  border-color: #F0B90B;
+}
+
+.nx-error {
+  font-size: 0.78rem;
+  color: #dc2626;
+  background-color: #fef2f2;
+  border-left: 3px solid #dc2626;
+  border-radius: 6px;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+}
+
+.nx-btn-ejecutar {
+  width: 100%;
+  padding: 14px;
+  background-color: #F0B90B;
+  color: #111827;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.nx-btn-ejecutar:hover {
+  background-color: #f8cc3a;
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(240, 185, 11, 0.4);
+}
+
+/* ── Right column — Historial ── */
+.nx-right {
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.nx-historial-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nx-historial-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.nx-historial-controles {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nx-input--search {
+  width: 200px;
+}
+
+.nx-btn-limpiar {
+  padding: 8px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #6b7280;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nx-btn-limpiar:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.nx-historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nx-historial-vacio {
+  text-align: center;
+  color: #9ca3af;
+  font-style: italic;
+  padding: 48px 0;
+  font-size: 0.9rem;
+}
+
+.nx-historial-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  animation: nx-fade 0.2s ease;
+}
+
+@keyframes nx-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nx-historial-izq {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nx-barra {
+  width: 4px;
+  height: 38px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.nx-barra--compra { background-color: #F0B90B; }
+.nx-barra--venta  { background-color: #dc2626; }
+
+.nx-historial-tipo {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.nx-historial-fecha {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.nx-historial-monto {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.nx-historial-monto--compra { color: #16a34a; }
+.nx-historial-monto--venta  { color: #dc2626; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .nx-content {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+  }
+  .nx-input--search {
+    width: 140px;
+  }
+}

@@ -1,6 +1,6 @@
-import Hero from '../components/Hero';
-import CryptoCard from '../components/CryptoCard';
-import AccordionItem from '../components/AccordionItem';
+import Hero from '../components/mvp/Hero';
+import CryptoCard from '../components/mvp/CryptoCard';
+import AccordionItem from '../components/mvp/AccordionItem';
 
 const criptos = [
   { nombre: 'Bitcoin',  simbolo: 'BTC', precio: '$97,432.10', cambio: 2.34,  icono: '₿' },

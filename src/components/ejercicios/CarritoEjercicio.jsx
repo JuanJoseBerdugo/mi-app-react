@@ -6,7 +6,7 @@ const cartItems = [
   { id: 3, nombre: 'Queso Para La Ratica', precio: 85.00 },
 ];
 
-function Carrito() {
+function CarritoEjercicio() {
   const [pagado, setPagado] = useState(false);
   const total = cartItems.reduce((acc, item) => acc + item.precio, 0);
 
@@ -45,4 +45,4 @@ function Carrito() {
   );
 }
 
-export default Carrito;
+export default CarritoEjercicio;

@@ -14,6 +14,8 @@ import GuardianRuta from './components/GuardianRuta'
 import StoreLayout from './components/StoreLayout'
 import { CartProvider } from './CartContext'
 import Store from './Store'
+import Pokedex from './pages/Pokedex'
+import RickAndMorty from './pages/RickAndMorty'
 
 function App() {
   const [logeado, setLogeado] = useState(false);
@@ -43,6 +45,8 @@ function App() {
           />
         </Route>
 
+        <Route path="/pokedex" element={<Pokedex />} />
+        <Route path="/rickandmorty" element={<RickAndMorty />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

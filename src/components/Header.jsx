@@ -28,6 +28,16 @@ function Header({ logeado, setLogeado }) {
               FakeStore
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/pokedex" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
+              Pokédex
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/rickandmorty" className={({ isActive }) => isActive ? 'nav-activo' : ''}>
+              Rick &amp; Morty
+            </NavLink>
+          </li>
         </ul>
       </nav>
 

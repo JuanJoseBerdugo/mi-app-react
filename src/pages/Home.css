@@ -59,7 +59,6 @@ html {
   z-index: 1;
 }
 
-/* ── Top balance bar ── */
 .poke-market-page-header {
   width: min(1320px, calc(100% - 40px));
   margin: 0 auto 20px;
@@ -94,7 +93,6 @@ html {
   color: var(--green);
 }
 
-/* ── Inline controls (card grid toolbar) ── */
 .poke-market-controls--inline {
   display: flex;
   flex-wrap: wrap;
@@ -710,7 +708,6 @@ html {
   box-shadow: 0 0 18px rgba(109, 232, 255, 0.3);
 }
 
-/* ── Mis activos panel ── */
 .poke-market-portfolio-panel {
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);

@@ -24,7 +24,7 @@ const FILTERS = [
 const MARKET_BATCH_SIZE = 12;
 const MARKET_REFRESH_MS = 30000;
 const PORTFOLIO_STORAGE_PREFIX = 'pokemon-market-portfolio::';
-const PORTFOLIO_VERSION = 2; // increment to reset all stored portfolios
+const PORTFOLIO_VERSION = 2;
 
 const tradeDateFormatter = new Intl.DateTimeFormat('es-CO', {
   dateStyle: 'medium',
@@ -421,7 +421,6 @@ function Home({ authUser, onRequestLogin }) {
   return (
     <main className="poke-market-page">
 
-      {/* Balance top-right */}
       <div className="poke-market-page-header">
         {marketFeedError && <span className="poke-market-inline-note">{marketFeedError}</span>}
         <div className="poke-market-balance-badge">
@@ -436,7 +435,6 @@ function Home({ authUser, onRequestLogin }) {
         </section>
       ) : (
         <>
-          {/* Detail + Trade */}
           <section className="poke-market-section poke-market-dashboard" id="trade-desk">
             <article className="poke-market-panel poke-market-panel--detail">
               {selectedAsset ? (
@@ -479,7 +477,6 @@ function Home({ authUser, onRequestLogin }) {
                   <div className="poke-market-detail-stack">
                     <MarketChart asset={selectedAsset} />
 
-                    {/* Mis activos */}
                     {ownedAssets.length > 0 && (
                       <div className="poke-market-portfolio-panel">
                         <h4 className="poke-market-portfolio-panel__title">Mis activos</h4>
@@ -600,7 +597,6 @@ function Home({ authUser, onRequestLogin }) {
             </aside>
           </section>
 
-          {/* Card market grid */}
           <section className="poke-market-section poke-market-panel" id="market-deck">
             <div className="poke-market-controls poke-market-controls--inline">
               <div className="poke-market-filter-group">

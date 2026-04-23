@@ -1,6 +1,6 @@
 function MercadosPopulares() {
   return (
-    <aside>
+    <aside className="mercados-populares">
       <h3>Mercados populares</h3>
 
       <div className="fila-moneda">

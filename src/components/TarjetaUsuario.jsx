@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 export function TarjetaUsuario({ usuario, esPremium, onActivar }) {
-  const [editando, setEditando] = useState(false);
   const [apodo, setApodo] = useState("");
 
   const manejarCambio = (e) => {
@@ -15,5 +14,5 @@ export function TarjetaUsuario({ usuario, esPremium, onActivar }) {
       {esPremium ? <span> 👑 VIP</span> : <button onClick={onActivar}>Ser Premium</button>}
       <input value={apodo} onChange={manejarCambio} />
     </div>
-  )
+  );
 }

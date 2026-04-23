@@ -1,4 +1,4 @@
-header {
+.site-header {
     background-color: #1E2026;
     border-bottom: 1px solid #2B2F36;
     padding: 0 40px;
@@ -12,7 +12,7 @@ header {
     z-index: 100;
 }
 
-.logo {
+.site-logo {
     font-size: 1.5rem;
     font-weight: bold;
     color: #F0B90B;
@@ -20,23 +20,23 @@ header {
     cursor: default;
 }
 
-.logo:hover {
+.site-logo:hover {
     transform: scale(1.08);
     text-shadow: 0 0 12px rgba(240, 185, 11, 0.6);
 }
 
-nav ul {
+.site-nav ul {
     display: flex;
     gap: 28px;
 }
 
-nav ul li a {
+.site-nav ul li a {
     transition: color 0.2s ease;
     position: relative;
     padding-bottom: 4px;
 }
 
-nav ul li a::after {
+.site-nav ul li a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -48,17 +48,30 @@ nav ul li a::after {
     transition: width 0.25s ease;
 }
 
-nav ul li a:hover {
+.site-nav ul li a:hover {
     color: #F0B90B;
 }
 
-nav ul li a:hover::after {
+.site-nav ul li a:hover::after {
     width: 100%;
 }
 
 .botones-header {
     display: flex;
+    align-items: center;
     gap: 12px;
+}
+
+.header-user-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(240, 185, 11, 0.12);
+    border: 1px solid rgba(240, 185, 11, 0.22);
+    color: #F6D56A;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .boton-borde {
@@ -94,6 +107,129 @@ nav ul li a:hover::after {
     transform: scale(1.05);
     background-color: #f8cc3a;
     box-shadow: 0 4px 16px rgba(240, 185, 11, 0.45);
+}
+
+.auth-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(4, 8, 14, 0.72);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+}
+
+.auth-modal {
+    width: min(460px, 100%);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      radial-gradient(circle at top right, rgba(240, 185, 11, 0.14), transparent 30%),
+      linear-gradient(180deg, #101824 0%, #0b111a 100%);
+    color: #F0F4FF;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.38);
+    padding: 24px;
+}
+
+.auth-modal__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.auth-modal__eyebrow {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #C8D6F6;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.auth-modal__top h2 {
+    font-size: 2rem;
+    margin: 16px 0 10px;
+    color: #F6FAFF;
+}
+
+.auth-modal__top p {
+    color: #9FB0CF;
+    line-height: 1.6;
+}
+
+.auth-modal__close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: #F0F4FF;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.auth-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.auth-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-modal__field span {
+    color: #B5C5E4;
+    font-size: 0.88rem;
+}
+
+.auth-modal__field input {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #F0F4FF;
+    padding: 14px 16px;
+    outline: none;
+    font: inherit;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.auth-modal__field input:focus {
+    border-color: rgba(240, 185, 11, 0.4);
+    box-shadow: 0 0 0 4px rgba(240, 185, 11, 0.08);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.auth-modal__error {
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: rgba(255, 125, 139, 0.12);
+    border: 1px solid rgba(255, 125, 139, 0.18);
+    color: #FFD8DD;
+    line-height: 1.5;
+}
+
+.auth-modal__submit {
+    min-height: 50px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #F7D456 0%, #FF9D66 100%);
+    color: #07101A;
+    font-size: 0.96rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 14px 26px rgba(255, 171, 91, 0.28);
+}
+
+.auth-modal__submit:hover {
+    transform: translateY(-1px);
 }
 
 .barra-precios {
@@ -191,7 +327,7 @@ nav ul li a:hover::after {
     box-shadow: 0 4px 18px rgba(240, 185, 11, 0.25);
 }
 
-aside {
+.mercados-populares {
     background-color: #1E2026;
     border: 1px solid #2B2F36;
     border-radius: 16px;
@@ -201,12 +337,12 @@ aside {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-aside:hover {
+.mercados-populares:hover {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
     transform: translateY(-4px);
 }
 
-aside h3 {
+.mercados-populares h3 {
     color: #848E9C;
     font-size: 0.9rem;
     margin-bottom: 20px;

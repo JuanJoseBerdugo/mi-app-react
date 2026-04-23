@@ -18,9 +18,9 @@ function Landing() {
           </Link>
 
           <Link to="/mvp" className="landing-card landing-card--mvp">
-            <span className="landing-card-icono">₿</span>
+            <span className="landing-card-icono">🃏</span>
             <h2>MVP</h2>
-            <p>Plataforma de criptomonedas — el entregable final</p>
+            <p>Trading desk de cartas Pokémon con precios, compras, ventas y gráficos</p>
             <span className="landing-card-arrow">→</span>
           </Link>
         </div>

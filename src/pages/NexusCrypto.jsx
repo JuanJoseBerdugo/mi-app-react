@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import './NexusCrypto.css';
 
 function NexusCrypto() {
@@ -10,6 +11,26 @@ function NexusCrypto() {
   const [historial, setHistorial] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [error, setError] = useState('');
+
+  const cargarDatos = async () => {
+    const { data, error } = await supabase.from('transacciones').select('*');
+    if (error) {
+      console.error('Error cargando transacciones:', error.message);
+      return;
+    }
+    const historialDB = data.map(t => ({
+      id: t.id,
+      tipo: t.crypto,
+      fecha: new Date(t.fecha).toLocaleString('es-CO'),
+      btcAmount: t.monto,
+      signo: t.monto >= 0 ? '+' : '-',
+    }));
+    setHistorial(historialDB);
+  };
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
 
   const btcEnUSD = btcBalance * precioBTC;
 

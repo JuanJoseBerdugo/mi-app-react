@@ -5,6 +5,11 @@ import Semaforo from '../components/ejercicios/Semaforo';
 import Comentarios from '../components/ejercicios/Comentarios';
 import CarritoEjercicio from '../components/ejercicios/CarritoEjercicio';
 import TodoList from '../components/ejercicios/TodoList';
+import GuardianNexo from '../components/ejercicios/GuardianNexo';
+import EscanerRendimiento from '../components/ejercicios/EscanerRendimiento';
+import SmartAuth from '../components/ejercicios/SmartAuth';
+import TheMirror from '../components/ejercicios/TheMirror';
+import TheVault from '../components/ejercicios/TheVault';
 
 const ejercicios = [
   {
@@ -41,6 +46,41 @@ const ejercicios = [
     descripcion: 'TodoList con categorías, filtros y eliminación de tareas.',
     icono: '✅',
     componente: <TodoList />,
+  },
+  {
+    id: 'guardiannexo',
+    titulo: 'El Guardián del Nexo',
+    descripcion: 'Validación en tiempo real con Zod: comprueba que los puntos sean un número entero positivo.',
+    icono: '🛡️',
+    componente: <GuardianNexo />,
+  },
+  {
+    id: 'escanerrendimiento',
+    titulo: 'El Escáner de Rendimiento',
+    descripcion: 'Compara re-renders entre estado tradicional y React Hook Form. Observa el monitor de renders.',
+    icono: '📊',
+    componente: <EscanerRendimiento />,
+  },
+  {
+    id: 'smartauth',
+    titulo: 'SmartAuth — Zod + RHF',
+    descripcion: 'Formulario con validación completa: Zod como schema y React Hook Form como motor. Errores en tiempo real.',
+    icono: '🔐',
+    componente: <SmartAuth />,
+  },
+  {
+    id: 'thevault',
+    titulo: 'The Vault — Supabase Storage',
+    descripcion: 'Simula un upload asíncrono al bucket de Supabase. Observa el stream de progreso y la publicUrl resultante.',
+    icono: '🔒',
+    componente: <TheVault />,
+  },
+  {
+    id: 'themirror',
+    titulo: 'The Mirror — Multimedia & Previews',
+    descripcion: 'Previsualiza imágenes locales al instante usando URL.createObjectURL. Sin subir nada al servidor.',
+    icono: '🪞',
+    componente: <TheMirror />,
   },
   {
     id: 'nexuscrypto',

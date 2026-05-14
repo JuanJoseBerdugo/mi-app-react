@@ -7,6 +7,8 @@ function AuthModal({ isOpen, mode, onClose, onSubmit }) {
     password: '',
   });
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -39,9 +41,10 @@ function AuthModal({ isOpen, mode, onClose, onSubmit }) {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
+    setNotice('');
 
     const email = form.email.trim().toLowerCase();
     const password = form.password.trim();
@@ -52,16 +55,32 @@ function AuthModal({ isOpen, mode, onClose, onSubmit }) {
       return;
     }
 
+    if (password.length < 6) {
+      setError('La contraseña debe tener minimo 6 caracteres.');
+      return;
+    }
+
     if (mode === 'register' && !displayName) {
       setError('Agrega un nombre para crear tu perfil.');
       return;
     }
 
-    onSubmit({
-      email,
-      password,
-      displayName: displayName || email.split('@')[0],
-    });
+    try {
+      setSubmitting(true);
+      const result = await onSubmit({
+        email,
+        password,
+        displayName: displayName || email.split('@')[0],
+      });
+
+      if (result?.notice) {
+        setNotice(result.notice);
+      }
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'No pudimos completar la autenticacion.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -83,8 +102,8 @@ function AuthModal({ isOpen, mode, onClose, onSubmit }) {
             </h2>
             <p>
               {mode === 'register'
-                ? 'Crea un perfil local para guardar saldo, compras, ventas e historial en este navegador.'
-                : 'Tu sesión básica desbloquea el trading y recupera tu saldo guardado.'}
+                ? 'Crea tu perfil para guardar saldo, compras, ventas, historial y foto en Supabase.'
+                : 'Tu sesion desbloquea el trading y recupera tu perfil guardado.'}
             </p>
           </div>
 
@@ -130,9 +149,10 @@ function AuthModal({ isOpen, mode, onClose, onSubmit }) {
           </label>
 
           {error && <div className="auth-modal__error">{error}</div>}
+          {notice && <div className="auth-modal__notice">{notice}</div>}
 
-          <button className="auth-modal__submit" type="submit">
-            {mode === 'register' ? 'Crear perfil y entrar' : 'Entrar al mercado'}
+          <button className="auth-modal__submit" type="submit" disabled={submitting}>
+            {submitting ? 'Conectando...' : mode === 'register' ? 'Crear perfil y entrar' : 'Entrar al mercado'}
           </button>
         </form>
       </div>

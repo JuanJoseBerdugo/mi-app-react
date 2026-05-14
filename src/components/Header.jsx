@@ -23,7 +23,14 @@ function Header({ authUser, onOpenLogin, onOpenRegister, onLogout }) {
       </nav>
 
       <div className="botones-header">
-        {authUser && <span className="header-user-pill">{authUser.displayName}</span>}
+        {authUser && (
+          <span className="header-user-pill">
+            {authUser.avatarUrl && (
+              <img src={authUser.avatarUrl} alt={authUser.displayName} className="header-user-avatar" />
+            )}
+            {authUser.displayName}
+          </span>
+        )}
         <button
           type="button"
           className="boton-borde"

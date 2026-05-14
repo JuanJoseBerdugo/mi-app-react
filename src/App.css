@@ -65,6 +65,7 @@
 .header-user-pill {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     padding: 8px 14px;
     border-radius: 999px;
     background: rgba(240, 185, 11, 0.12);
@@ -72,6 +73,15 @@
     color: #F6D56A;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.header-user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(246, 213, 106, 0.4);
+    background: #0B0E11;
 }
 
 .boton-borde {
@@ -216,6 +226,15 @@
     line-height: 1.5;
 }
 
+.auth-modal__notice {
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: rgba(66, 229, 159, 0.12);
+    border: 1px solid rgba(66, 229, 159, 0.18);
+    color: #C9FFE2;
+    line-height: 1.5;
+}
+
 .auth-modal__submit {
     min-height: 50px;
     border: none;
@@ -228,8 +247,13 @@
     box-shadow: 0 14px 26px rgba(255, 171, 91, 0.28);
 }
 
-.auth-modal__submit:hover {
+.auth-modal__submit:hover:not(:disabled) {
     transform: translateY(-1px);
+}
+
+.auth-modal__submit:disabled {
+    opacity: 0.62;
+    cursor: not-allowed;
 }
 
 .barra-precios {

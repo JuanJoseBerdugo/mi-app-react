@@ -10,6 +10,7 @@ import EscanerRendimiento from '../components/ejercicios/EscanerRendimiento';
 import SmartAuth from '../components/ejercicios/SmartAuth';
 import TheMirror from '../components/ejercicios/TheMirror';
 import TheVault from '../components/ejercicios/TheVault';
+import AssetManager from '../components/ejercicios/AssetManager';
 
 const ejercicios = [
   {
@@ -74,6 +75,13 @@ const ejercicios = [
     descripcion: 'Simula un upload asíncrono al bucket de Supabase. Observa el stream de progreso y la publicUrl resultante.',
     icono: '🔒',
     componente: <TheVault />,
+  },
+  {
+    id: 'assetmanager',
+    titulo: 'Asset Manager — Update CRUD',
+    descripcion: 'Formulario con dos modos: Crear y Editar. Haz clic en una fila para cargar sus datos y actualizarlos con Supabase.',
+    icono: '🗂️',
+    componente: <AssetManager />,
   },
   {
     id: 'themirror',

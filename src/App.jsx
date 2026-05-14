@@ -18,41 +18,48 @@ import Store from './Store'
 import Pokedex from './pages/Pokedex'
 import RickAndMorty from './pages/RickAndMorty'
 import NexusCrypto from './pages/NexusCrypto'
-
-const AUTH_STORAGE_KEY = 'pokemon-market-auth-user';
-
-function getStoredAuthUser() {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  try {
-    const rawAuth = window.localStorage.getItem(AUTH_STORAGE_KEY);
-
-    return rawAuth ? JSON.parse(rawAuth) : null;
-  } catch {
-    return null;
-  }
-}
+import { supabase } from './lib/supabase'
+import { getPokemonProfile } from './services/ProfileService'
 
 function App() {
-  const [authUser, setAuthUser] = useState(getStoredAuthUser);
+  const [authUser, setAuthUser] = useState(null);
   const [authModalMode, setAuthModalMode] = useState('login');
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const logeado = Boolean(authUser);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
+    let isMounted = true;
+
+    async function syncSession(session) {
+      if (!session?.user) {
+        if (isMounted) {
+          setAuthUser(null);
+        }
+        return;
+      }
+
+      const profile = await getPokemonProfile(session.user);
+
+      if (isMounted) {
+        setAuthUser(profile);
+      }
     }
 
-    if (authUser) {
-      window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authUser));
-      return;
-    }
+    supabase.auth.getSession().then(({ data }) => {
+      syncSession(data.session);
+    });
 
-    window.localStorage.removeItem(AUTH_STORAGE_KEY);
-  }, [authUser]);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      syncSession(session);
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const openAuthModal = (mode) => {
     setAuthModalMode(mode);
@@ -63,16 +70,52 @@ function App() {
     setAuthModalOpen(false);
   };
 
-  const handleAuthSubmit = ({ email, displayName }) => {
-    setAuthUser({
+  const handleAuthSubmit = async ({ email, password, displayName }) => {
+    if (authModalMode === 'register') {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            display_name: displayName,
+            xp_rank: 1000,
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data.session) {
+        return {
+          notice: 'Cuenta creada. Revisa tu correo para confirmar el acceso antes de iniciar sesion.',
+        };
+      }
+
+      const profile = await getPokemonProfile(data.user);
+      setAuthUser(profile);
+      setAuthModalOpen(false);
+      return null;
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      displayName,
-      loggedAt: Date.now(),
+      password,
     });
+
+    if (error) {
+      throw error;
+    }
+
+    const profile = await getPokemonProfile(data.user);
+    setAuthUser(profile);
     setAuthModalOpen(false);
+    return null;
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setAuthUser(null);
     setAuthModalOpen(false);
   };
@@ -116,7 +159,13 @@ function App() {
         {/* MVP — mercado de cartas Pokémon */}
         <Route
           path="/mvp"
-          element={<Home authUser={authUser} onRequestLogin={() => openAuthModal('login')} />}
+          element={
+            <Home
+              authUser={authUser}
+              onRequestLogin={() => openAuthModal('login')}
+              onProfileUpdated={setAuthUser}
+            />
+          }
         />
 
         <Route path="*" element={<NotFound />} />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import CryptoCard from '../components/mvp/CryptoCard';
 import MarketChart from '../components/mvp/MarketChart';
+import ProfileSettings from '../components/mvp/ProfileSettings';
 import './Home.css';
 import {
   applyLiveMarketSnapshot,
@@ -124,7 +125,7 @@ function normalizePortfolio(rawPortfolio, seedTransactions) {
   };
 }
 
-function Home({ authUser, onRequestLogin }) {
+function Home({ authUser, onRequestLogin, onProfileUpdated }) {
   const [assets, setAssets] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [cashBalance, setCashBalance] = useState(INITIAL_CASH_BALANCE);
@@ -435,6 +436,10 @@ function Home({ authUser, onRequestLogin }) {
         </section>
       ) : (
         <>
+          {authUser && (
+            <ProfileSettings authUser={authUser} onProfileUpdated={onProfileUpdated} />
+          )}
+
           <section className="poke-market-section poke-market-dashboard" id="trade-desk">
             <article className="poke-market-panel poke-market-panel--detail">
               {selectedAsset ? (

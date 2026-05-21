@@ -1,17 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CryptoCard from '../components/mvp/CryptoCard';
 import MarketChart from '../components/mvp/MarketChart';
 import ProfileSettings from '../components/mvp/ProfileSettings';
+import CryptoTicker from '../components/mvp/CryptoTicker';
+import ExchangeTabs from '../components/mvp/ExchangeTabs';
+import InventoryView from '../components/mvp/InventoryView';
+import SwapPanel from '../components/mvp/SwapPanel';
+import ActivityLog from '../components/mvp/ActivityLog';
+import { usePortfolio } from '../hooks/usePortfolio';
 import './Home.css';
 import {
   applyLiveMarketSnapshot,
   buildMarketAsset,
-  buildSeedTransactions,
   COINBASE_PRODUCTS,
   formatCurrency,
   formatSignedPercent,
   INITIAL_CASH_BALANCE,
-  INITIAL_HOLDINGS,
   MARKET_POKEMON,
 } from '../data/pokemonMarket';
 
@@ -22,19 +26,11 @@ const FILTERS = [
   { id: 'owned', label: 'En cartera' },
 ];
 
-const MARKET_BATCH_SIZE = 12;
+const MARKET_BATCH_SIZE = 10;
+const CRYPTO_BATCH_SIZE = 6;
 const MARKET_REFRESH_MS = 30000;
-const PORTFOLIO_STORAGE_PREFIX = 'pokemon-market-portfolio::';
-const PORTFOLIO_VERSION = 2;
 
-const tradeDateFormatter = new Intl.DateTimeFormat('es-CO', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
-
-const marketTimeFormatter = new Intl.DateTimeFormat('es-CO', {
-  timeStyle: 'short',
-});
+const marketTimeFormatter = new Intl.DateTimeFormat('es-CO', { timeStyle: 'short' });
 
 async function fetchMarketAsset(meta) {
   try {
@@ -57,84 +53,50 @@ async function fetchMarketAsset(meta) {
 }
 
 async function fetchCryptoReferenceStats() {
-  const results = await Promise.all(
-    COINBASE_PRODUCTS.map(async (product) => {
-      try {
-        const response = await fetch(`https://api.exchange.coinbase.com/products/${product.id}/stats`);
+  const quotes = {};
 
-        if (!response.ok) {
-          throw new Error(`Product ${product.id} unavailable`);
+  for (let index = 0; index < COINBASE_PRODUCTS.length; index += CRYPTO_BATCH_SIZE) {
+    const batch = COINBASE_PRODUCTS.slice(index, index + CRYPTO_BATCH_SIZE);
+    const results = await Promise.all(
+      batch.map(async (product) => {
+        try {
+          const response = await fetch(`https://api.exchange.coinbase.com/products/${product.id}/stats`);
+          if (!response.ok) {
+            throw new Error(`Product ${product.id} unavailable`);
+          }
+          const payload = await response.json();
+          return [product.id, { ...payload, productId: product.id, label: product.label, fetchedAt: Date.now() }];
+        } catch {
+          return null;
         }
+      })
+    );
 
-        const payload = await response.json();
-
-        return [
-          product.id,
-          {
-            ...payload,
-            productId: product.id,
-            label: product.label,
-            fetchedAt: Date.now(),
-          },
-        ];
-      } catch {
-        return null;
+    for (const entry of results) {
+      if (entry) {
+        quotes[entry[0]] = entry[1];
       }
-    })
-  );
-
-  return Object.fromEntries(results.filter(Boolean));
-}
-
-function getPortfolioStorageKey(authUser) {
-  return authUser?.email ? `${PORTFOLIO_STORAGE_PREFIX}${authUser.email}` : null;
-}
-
-function getDefaultPortfolio(seedTransactions) {
-  return {
-    cashBalance: INITIAL_CASH_BALANCE,
-    holdings: INITIAL_HOLDINGS,
-    transactions: seedTransactions,
-  };
-}
-
-function normalizePortfolio(rawPortfolio, seedTransactions) {
-  if (!rawPortfolio || typeof rawPortfolio !== 'object' || rawPortfolio.version !== PORTFOLIO_VERSION) {
-    return getDefaultPortfolio(seedTransactions);
+    }
   }
 
-  const cashBalance =
-    Number.isFinite(Number(rawPortfolio.cashBalance)) && Number(rawPortfolio.cashBalance) >= 0
-      ? Number(rawPortfolio.cashBalance)
-      : INITIAL_CASH_BALANCE;
-
-  const holdings =
-    rawPortfolio.holdings && typeof rawPortfolio.holdings === 'object'
-      ? rawPortfolio.holdings
-      : INITIAL_HOLDINGS;
-
-  const transactions =
-    Array.isArray(rawPortfolio.transactions) && rawPortfolio.transactions.length
-      ? rawPortfolio.transactions
-      : seedTransactions;
-
-  return {
-    cashBalance,
-    holdings,
-    transactions,
-  };
+  return quotes;
 }
+
+const TABS = [
+  { id: 'market', label: 'Mercado', icon: '🛰️' },
+  { id: 'trade', label: 'Operar', icon: '💱' },
+  { id: 'inventory', label: 'Inventario', icon: '🎒' },
+  { id: 'activity', label: 'Actividad', icon: '📜' },
+];
 
 function Home({ authUser, onRequestLogin, onProfileUpdated }) {
   const [assets, setAssets] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
-  const [cashBalance, setCashBalance] = useState(INITIAL_CASH_BALANCE);
-  const [holdings, setHoldings] = useState(INITIAL_HOLDINGS);
   const [tradeSide, setTradeSide] = useState('buy');
   const [quantity, setQuantity] = useState('1');
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
-  const [transactions, setTransactions] = useState([]);
+  const [activeTab, setActiveTab] = useState('market');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [tradeError, setTradeError] = useState('');
@@ -143,7 +105,9 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
   const [liveMarketAnchor, setLiveMarketAnchor] = useState({});
   const [marketFeedError, setMarketFeedError] = useState('');
   const [marketSyncedAt, setMarketSyncedAt] = useState(null);
-  const [portfolioReady, setPortfolioReady] = useState(false);
+
+  const portfolio = usePortfolio(authUser);
+  const { cashBalance, holdings, transactions, ready: portfolioReady, mode } = portfolio;
 
   useEffect(() => {
     let cancelled = false;
@@ -158,39 +122,28 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
         for (let index = 0; index < MARKET_POKEMON.length; index += MARKET_BATCH_SIZE) {
           const batch = MARKET_POKEMON.slice(index, index + MARKET_BATCH_SIZE);
           const batchAssets = await Promise.all(batch.map(fetchMarketAsset));
-
-          if (cancelled) {
-            return;
-          }
-
+          if (cancelled) return;
           collectedAssets.push(...batchAssets.filter(Boolean));
         }
 
-        const readyAssets = collectedAssets.sort((assetA, assetB) => assetB.basePrice - assetA.basePrice);
-
+        const readyAssets = collectedAssets.sort((a, b) => b.basePrice - a.basePrice);
         if (!readyAssets.length) {
           throw new Error('No assets loaded');
         }
-
-        if (cancelled) {
-          return;
-        }
+        if (cancelled) return;
 
         setAssets(readyAssets);
         setSelectedId((current) => current ?? readyAssets[0].id);
       } catch {
         if (!cancelled) {
-          setLoadError('No pudimos sincronizar PokeAPI en este momento. Reintenta más tarde.');
+          setLoadError('No pudimos sincronizar PokeAPI en este momento. Reintenta mas tarde.');
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     loadMarket();
-
     return () => {
       cancelled = true;
     };
@@ -198,35 +151,29 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
 
   useEffect(() => {
     let cancelled = false;
-    let intervalId;
 
     async function syncCryptoMarket(isFirstLoad) {
       try {
         const quotes = await fetchCryptoReferenceStats();
-
         if (cancelled || !Object.keys(quotes).length) {
           if (isFirstLoad && !cancelled) {
-            setMarketFeedError('Feed cripto temporalmente no disponible. Mostrando precios base del mercado.');
+            setMarketFeedError('Feed cripto temporalmente no disponible. Mostrando precios base.');
           }
           return;
         }
-
         setLiveMarket(quotes);
         setLiveMarketAnchor((current) => (Object.keys(current).length ? current : quotes));
         setMarketFeedError('');
         setMarketSyncedAt(Date.now());
       } catch {
         if (isFirstLoad && !cancelled) {
-          setMarketFeedError('Feed cripto temporalmente no disponible. Mostrando precios base del mercado.');
+          setMarketFeedError('Feed cripto temporalmente no disponible. Mostrando precios base.');
         }
       }
     }
 
     syncCryptoMarket(true);
-    intervalId = window.setInterval(() => {
-      syncCryptoMarket(false);
-    }, MARKET_REFRESH_MS);
-
+    const intervalId = window.setInterval(() => syncCryptoMarket(false), MARKET_REFRESH_MS);
     return () => {
       cancelled = true;
       window.clearInterval(intervalId);
@@ -234,82 +181,36 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
   }, []);
 
   useEffect(() => {
-    if (!feedback) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setFeedback('');
-    }, 2800);
-
+    if (!feedback) return undefined;
+    const timeoutId = window.setTimeout(() => setFeedback(''), 2800);
     return () => window.clearTimeout(timeoutId);
   }, [feedback]);
 
   useEffect(() => {
-    if (!assets.length) {
-      return;
+    if (activeTab === 'profile' && !authUser) {
+      setActiveTab('market');
     }
+  }, [activeTab, authUser]);
 
-    const seedTransactions = buildSeedTransactions(assets);
-    const storageKey = getPortfolioStorageKey(authUser);
-    setPortfolioReady(false);
-
-    if (!storageKey) {
-      const defaultPortfolio = getDefaultPortfolio(seedTransactions);
-      setCashBalance(defaultPortfolio.cashBalance);
-      setHoldings(defaultPortfolio.holdings);
-      setTransactions(defaultPortfolio.transactions);
-      setPortfolioReady(true);
-      return;
-    }
-
-    try {
-      const rawPortfolio = window.localStorage.getItem(storageKey);
-      const parsedPortfolio = rawPortfolio ? JSON.parse(rawPortfolio) : null;
-      const portfolio = normalizePortfolio(parsedPortfolio, seedTransactions);
-
-      setCashBalance(portfolio.cashBalance);
-      setHoldings(portfolio.holdings);
-      setTransactions(portfolio.transactions);
-    } catch {
-      const fallbackPortfolio = getDefaultPortfolio(seedTransactions);
-      setCashBalance(fallbackPortfolio.cashBalance);
-      setHoldings(fallbackPortfolio.holdings);
-      setTransactions(fallbackPortfolio.transactions);
-    }
-
-    setPortfolioReady(true);
-  }, [authUser, assets]);
-
-  useEffect(() => {
-    const storageKey = getPortfolioStorageKey(authUser);
-
-    if (!storageKey || !portfolioReady) {
-      return;
-    }
-
-    window.localStorage.setItem(
-      storageKey,
-      JSON.stringify({
-        version: PORTFOLIO_VERSION,
-        cashBalance,
-        holdings,
-        transactions,
-      })
-    );
-  }, [authUser, portfolioReady, cashBalance, holdings, transactions]);
-
-  const marketAssets = assets
-    .map((asset) =>
-      applyLiveMarketSnapshot(asset, liveMarket[asset.referenceProductId], liveMarketAnchor[asset.referenceProductId])
-    )
-    .map((asset) => ({
-      ...asset,
-      ownedQuantity: holdings[asset.id] ?? 0,
-    }));
+  const marketAssets = useMemo(
+    () =>
+      assets
+        .map((asset) =>
+          applyLiveMarketSnapshot(asset, liveMarket[asset.referenceProductId], liveMarketAnchor[asset.referenceProductId])
+        )
+        .map((asset) => {
+          const holding = holdings[asset.id];
+          return {
+            ...asset,
+            ownedQuantity: holding?.quantity ?? 0,
+            avgCost: holding?.avgCost ?? 0,
+          };
+        }),
+    [assets, liveMarket, liveMarketAnchor, holdings]
+  );
 
   const selectedAsset = marketAssets.find((asset) => asset.id === selectedId) ?? marketAssets[0] ?? null;
-  const selectedQuantity = selectedAsset ? holdings[selectedAsset.id] ?? 0 : 0;
+  const selectedQuantity = selectedAsset?.ownedQuantity ?? 0;
   const parsedQuantity = Number(quantity);
   const normalizedQuantity = Number.isFinite(parsedQuantity) ? Math.max(0, Math.floor(parsedQuantity)) : 0;
   const estimatedTotal = selectedAsset ? selectedAsset.price * normalizedQuantity : 0;
@@ -320,114 +221,128 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
       !searchTerm ||
       asset.name.toLowerCase().includes(searchTerm) ||
       asset.ticker.toLowerCase().includes(searchTerm) ||
+      asset.referenceProductSymbol?.toLowerCase().includes(searchTerm) ||
       asset.types.some((type) => type.toLowerCase().includes(searchTerm));
 
-    if (!matchesSearch) {
-      return false;
-    }
-
-    if (activeFilter === 'legendary') {
-      return asset.isLegendary || asset.isMythical;
-    }
-
-    if (activeFilter === 'bullish') {
-      return asset.changePct > 0;
-    }
-
-    if (activeFilter === 'owned') {
-      return asset.ownedQuantity > 0;
-    }
-
+    if (!matchesSearch) return false;
+    if (activeFilter === 'legendary') return asset.isLegendary || asset.isMythical;
+    if (activeFilter === 'bullish') return asset.changePct > 0;
+    if (activeFilter === 'owned') return asset.ownedQuantity > 0;
     return true;
   });
 
-  const collectionValue = marketAssets.reduce(
-    (total, asset) => total + asset.price * (holdings[asset.id] ?? 0),
-    0
+  const ownedAssets = useMemo(
+    () =>
+      marketAssets
+        .filter((asset) => asset.ownedQuantity > 0)
+        .map((asset) => {
+          const value = asset.price * asset.ownedQuantity;
+          const costBasis = asset.avgCost * asset.ownedQuantity;
+          const gifted = asset.avgCost === 0;
+          const pnl = value - costBasis;
+          const pnlPct = costBasis > 0 ? (pnl / costBasis) * 100 : 0;
+          return { ...asset, value, costBasis, gifted, pnl, pnlPct };
+        }),
+    [marketAssets]
   );
 
-  const ownedAssets = marketAssets.filter((asset) => (holdings[asset.id] ?? 0) > 0);
+  const totals = useMemo(() => {
+    const collectionValue = ownedAssets.reduce((sum, asset) => sum + asset.value, 0);
+    const costBasis = ownedAssets.reduce((sum, asset) => sum + asset.costBasis, 0);
+    const totalCards = ownedAssets.reduce((sum, asset) => sum + asset.ownedQuantity, 0);
+    const pnl = collectionValue - costBasis;
+    const pnlPct = costBasis > 0 ? (pnl / costBasis) * 100 : 0;
+    const topAsset = ownedAssets.reduce((best, asset) => (!best || asset.value > best.value ? asset : best), null);
+    return { collectionValue, costBasis, totalCards, pnl, pnlPct, topAsset };
+  }, [ownedAssets]);
 
-  const handleTradeSubmit = (event) => {
+  const netWorth = cashBalance + totals.collectionValue;
+  const netPnl = netWorth - INITIAL_CASH_BALANCE;
+  const topMover = useMemo(
+    () => marketAssets.reduce((best, asset) => (!best || asset.changePct > best.changePct ? asset : best), null),
+    [marketAssets]
+  );
+
+  const tabs = authUser ? [...TABS, { id: 'profile', label: 'Perfil', icon: '⚙️' }] : TABS;
+
+  function goToTrade(id) {
+    setSelectedId(id);
+    setActiveTab('trade');
+  }
+
+  function handleTradeSubmit(event) {
     event.preventDefault();
-
-    if (!selectedAsset) {
-      return;
-    }
-
     setTradeError('');
     setFeedback('');
 
+    if (!selectedAsset) return;
+
     if (!authUser) {
-      setTradeError('Inicia sesión para comprar o vender cartas con tu saldo guardado.');
+      setTradeError('Inicia sesion para operar con tu saldo guardado.');
       onRequestLogin();
       return;
     }
 
-    if (!portfolioReady) {
-      setTradeError('Estamos preparando tu cartera. Intenta de nuevo en un segundo.');
-      return;
-    }
+    const result = tradeSide === 'buy'
+      ? portfolio.buy(selectedAsset, normalizedQuantity)
+      : portfolio.sell(selectedAsset, normalizedQuantity);
 
-    if (!normalizedQuantity) {
-      setTradeError('Ingresa una cantidad de cartas válida.');
-      return;
-    }
-
-    const total = selectedAsset.price * normalizedQuantity;
-
-    if (tradeSide === 'buy') {
-      if (total > cashBalance) {
-        setTradeError(`Saldo insuficiente. Necesitas ${formatCurrency(total)} para ejecutar la compra.`);
-        return;
-      }
-
-      setCashBalance((current) => current - total);
-      setHoldings((current) => ({
-        ...current,
-        [selectedAsset.id]: (current[selectedAsset.id] ?? 0) + normalizedQuantity,
-      }));
-      setFeedback(`Compraste ${normalizedQuantity} ${selectedAsset.name} por ${formatCurrency(total)}.`);
+    if (result.ok) {
+      setFeedback(result.message);
+      setQuantity('1');
     } else {
-      if (normalizedQuantity > selectedQuantity) {
-        setTradeError(`No tienes suficientes ${selectedAsset.name}. En cartera: ${selectedQuantity}.`);
-        return;
-      }
-
-      setCashBalance((current) => current + total);
-      setHoldings((current) => ({
-        ...current,
-        [selectedAsset.id]: Math.max(0, (current[selectedAsset.id] ?? 0) - normalizedQuantity),
-      }));
-      setFeedback(`Vendiste ${normalizedQuantity} ${selectedAsset.name} por ${formatCurrency(total)}.`);
+      setTradeError(result.message);
     }
+  }
 
-    setTransactions((current) => [
-      {
-        id: `trade-${Date.now()}`,
-        assetId: selectedAsset.id,
-        assetName: selectedAsset.name,
-        assetTicker: selectedAsset.ticker,
-        side: tradeSide,
-        quantity: normalizedQuantity,
-        unitPrice: selectedAsset.price,
-        total,
-        executedAt: Date.now(),
-      },
-      ...current,
-    ]);
-    setQuantity('1');
-  };
+  const syncLabel = marketSyncedAt ? `Sync ${marketTimeFormatter.format(marketSyncedAt)}` : 'Sincronizando…';
 
   return (
     <main className="poke-market-page">
-
-      <div className="poke-market-page-header">
-        {marketFeedError && <span className="poke-market-inline-note">{marketFeedError}</span>}
-        <div className="poke-market-balance-badge">
-          <span>Saldo</span>
-          <strong>{formatCurrency(cashBalance)}</strong>
+      <header className="poke-market-section poke-x-topbar">
+        <div className="poke-x-brand">
+          <span className="poke-x-brand__logo">PX</span>
+          <div>
+            <h1>PokeXchange</h1>
+            <p>Cartas legendarias enlazadas a cripto real · {COINBASE_PRODUCTS.length} mercados en vivo</p>
+          </div>
         </div>
+        <div className="poke-x-stats">
+          <div className="poke-x-stat">
+            <span>Patrimonio</span>
+            <strong>{formatCurrency(netWorth)}</strong>
+          </div>
+          <div className="poke-x-stat">
+            <span>Efectivo</span>
+            <strong>{formatCurrency(cashBalance)}</strong>
+          </div>
+          <div className="poke-x-stat">
+            <span>P&amp;L total</span>
+            <strong className={netPnl >= 0 ? 'is-up' : 'is-down'}>
+              {netPnl >= 0 ? '+' : ''}{formatCurrency(netPnl)}
+            </strong>
+          </div>
+          <div className="poke-x-stat poke-x-stat--sync">
+            <span className={`poke-x-sync ${mode === 'cloud' ? 'is-cloud' : mode === 'local' ? 'is-local' : ''}`}>
+              {mode === 'cloud' ? '☁ Nube' : mode === 'local' ? '💾 Local' : '👤 Invitado'}
+            </span>
+            <small>{syncLabel}</small>
+          </div>
+        </div>
+      </header>
+
+      <div className="poke-market-section">
+        <CryptoTicker quotes={liveMarket} syncedAt={marketSyncedAt} />
+      </div>
+
+      {marketFeedError && (
+        <div className="poke-market-section">
+          <span className="poke-market-inline-note">{marketFeedError}</span>
+        </div>
+      )}
+
+      <div className="poke-market-section">
+        <ExchangeTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
 
       {loadError ? (
@@ -436,213 +351,263 @@ function Home({ authUser, onRequestLogin, onProfileUpdated }) {
         </section>
       ) : (
         <>
-          {authUser && (
-            <ProfileSettings authUser={authUser} onProfileUpdated={onProfileUpdated} />
+          {/* ----------------------------- MERCADO ----------------------------- */}
+          {activeTab === 'market' && (
+            <>
+              {topMover && (
+                <section className="poke-market-section poke-x-spotlight" style={{ '--spot-accent': topMover.palette.accent }}>
+                  <div className="poke-x-spotlight__info">
+                    <span className="poke-market-mini-badge">Mayor movimiento 24H</span>
+                    <h2>{topMover.name}</h2>
+                    <p>{topMover.headline}</p>
+                    <div className="poke-x-spotlight__metrics">
+                      <div>
+                        <span>Precio</span>
+                        <strong>{formatCurrency(topMover.price)}</strong>
+                      </div>
+                      <div>
+                        <span>24H</span>
+                        <strong className={topMover.changePct >= 0 ? 'is-up' : 'is-down'}>
+                          {formatSignedPercent(topMover.changePct)}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Enlazado a</span>
+                        <strong>{topMover.referenceProductSymbol}</strong>
+                      </div>
+                    </div>
+                    <button type="button" className="poke-market-btn poke-market-btn--primary" onClick={() => goToTrade(topMover.id)}>
+                      Operar {topMover.name}
+                    </button>
+                  </div>
+                  <img src={topMover.image} alt={topMover.name} />
+                </section>
+              )}
+
+              <section className="poke-market-section poke-market-panel">
+                <div className="poke-market-controls poke-market-controls--inline">
+                  <div className="poke-market-filter-group">
+                    {FILTERS.map((filter) => (
+                      <button
+                        key={filter.id}
+                        type="button"
+                        className={`poke-market-filter ${activeFilter === filter.id ? 'is-active' : ''}`}
+                        onClick={() => setActiveFilter(filter.id)}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input
+                    className="poke-market-search"
+                    type="search"
+                    placeholder="Buscar carta o cripto (BTC, ETH...)"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                </div>
+
+                {loading && !marketAssets.length ? (
+                  <div className="poke-market-state">Sincronizando cartas desde PokeAPI…</div>
+                ) : filteredAssets.length ? (
+                  <div className="pokemon-asset-grid">
+                    {filteredAssets.map((asset) => (
+                      <CryptoCard
+                        key={asset.id}
+                        asset={asset}
+                        ownedQuantity={asset.ownedQuantity}
+                        isActive={asset.id === selectedAsset?.id}
+                        onSelect={goToTrade}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="poke-market-state">No encontramos cartas para ese filtro.</div>
+                )}
+              </section>
+            </>
           )}
 
-          <section className="poke-market-section poke-market-dashboard" id="trade-desk">
-            <article className="poke-market-panel poke-market-panel--detail">
-              {selectedAsset ? (
-                <div className="poke-market-detail-grid">
-                  <div
-                    className={`poke-market-collector-card poke-market-collector-card--${selectedAsset.rarityTone}`}
-                    style={{
-                      '--card-accent': selectedAsset.palette.accent,
-                      '--card-accent-alt': selectedAsset.palette.accentAlt,
-                    }}
-                  >
-                    <div className="poke-market-collector-card__top">
-                      <span>{selectedAsset.grade}</span>
-                      <span>{selectedAsset.generationLabel}</span>
-                    </div>
-                    <div className="poke-market-collector-card__art">
-                      <img src={selectedAsset.image} alt={selectedAsset.name} />
-                      <span>{selectedAsset.ticker}</span>
-                    </div>
-                    <div className="poke-market-collector-card__body">
-                      <div className="poke-market-collector-card__headline">
-                        <div>
-                          <h3>{selectedAsset.name}</h3>
-                          <p>{selectedAsset.headline}</p>
+          {/* ----------------------------- OPERAR ----------------------------- */}
+          {activeTab === 'trade' && (
+            <section className="poke-market-section poke-market-dashboard">
+              <article className="poke-market-panel poke-market-panel--detail">
+                {selectedAsset ? (
+                  <div className="poke-market-detail-grid">
+                    <div
+                      className={`poke-market-collector-card poke-market-collector-card--${selectedAsset.rarityTone}`}
+                      style={{
+                        '--card-accent': selectedAsset.palette.accent,
+                        '--card-accent-alt': selectedAsset.palette.accentAlt,
+                      }}
+                    >
+                      <div className="poke-market-collector-card__top">
+                        <span>{selectedAsset.grade}</span>
+                        <span>{selectedAsset.generationLabel}</span>
+                      </div>
+                      <div className="poke-market-collector-card__art">
+                        <img src={selectedAsset.image} alt={selectedAsset.name} />
+                        <span>{selectedAsset.ticker}</span>
+                      </div>
+                      <div className="poke-market-collector-card__body">
+                        <div className="poke-market-collector-card__headline">
+                          <div>
+                            <h3>{selectedAsset.name}</h3>
+                            <p>{selectedAsset.headline}</p>
+                          </div>
+                          <strong>{formatCurrency(selectedAsset.price)}</strong>
                         </div>
-                        <strong>{formatCurrency(selectedAsset.price)}</strong>
-                      </div>
-                      <div className="poke-market-tag-row">
-                        {selectedAsset.types.map((type) => (
-                          <span key={`${selectedAsset.id}-${type}`}>{type}</span>
-                        ))}
-                      </div>
-                      <div className="poke-market-collector-card__owned">
-                        <span>En cartera</span>
-                        <strong>{selectedQuantity}</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="poke-market-detail-stack">
-                    <MarketChart asset={selectedAsset} />
-
-                    {ownedAssets.length > 0 && (
-                      <div className="poke-market-portfolio-panel">
-                        <h4 className="poke-market-portfolio-panel__title">Mis activos</h4>
-                        <div className="poke-market-portfolio-list">
-                          {ownedAssets.map((asset) => {
-                            const qty = holdings[asset.id] ?? 0;
-                            const value = asset.price * qty;
-                            return (
-                              <button
-                                key={asset.id}
-                                type="button"
-                                className={`poke-market-portfolio-item ${asset.id === selectedId ? 'is-active' : ''}`}
-                                onClick={() => setSelectedId(asset.id)}
-                              >
-                                <img src={asset.image} alt={asset.name} />
-                                <div className="poke-market-portfolio-item__info">
-                                  <strong>{asset.name}</strong>
-                                  <span>{qty} carta{qty !== 1 ? 's' : ''}</span>
-                                </div>
-                                <div className="poke-market-portfolio-item__value">
-                                  <strong>{formatCurrency(value)}</strong>
-                                  <span className={asset.changePct >= 0 ? 'is-up' : 'is-down'}>
-                                    {formatSignedPercent(asset.changePct)}
-                                  </span>
-                                </div>
-                              </button>
-                            );
-                          })}
+                        <div className="poke-market-tag-row">
+                          {selectedAsset.types.map((type) => (
+                            <span key={`${selectedAsset.id}-${type}`}>{type}</span>
+                          ))}
+                          <span className="poke-x-coin-chip">◎ {selectedAsset.referenceProductSymbol}</span>
+                        </div>
+                        <div className="poke-market-collector-card__owned">
+                          <span>En cartera</span>
+                          <strong>{selectedQuantity}</strong>
                         </div>
                       </div>
-                    )}
+                    </div>
+
+                    <div className="poke-market-detail-stack">
+                      <MarketChart asset={selectedAsset} />
+                      <div className="poke-market-stat-grid">
+                        <article>
+                          <span>Enlazado a</span>
+                          <strong>{selectedAsset.referenceProductLabel}</strong>
+                          {typeof selectedAsset.cryptoChangePct === 'number' && (
+                            <small className={selectedAsset.cryptoChangePct >= 0 ? 'is-up' : 'is-down'}>
+                              {formatSignedPercent(selectedAsset.cryptoChangePct)} hoy
+                            </small>
+                          )}
+                        </article>
+                        <article>
+                          <span>Floor</span>
+                          <strong>{formatCurrency(selectedAsset.floorPrice)}</strong>
+                          <small>Piso de mercado</small>
+                        </article>
+                        <article>
+                          <span>Spread</span>
+                          <strong>{selectedAsset.spreadPct}%</strong>
+                          <small>Compra / venta</small>
+                        </article>
+                        <article>
+                          <span>Demanda</span>
+                          <strong>{selectedAsset.demandScore}/99</strong>
+                          <small>{selectedAsset.sentimentLabel}</small>
+                        </article>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="poke-market-state">
-                  {loading ? 'Sincronizando cartas...' : 'Selecciona una carta del mercado'}
-                </div>
-              )}
-            </article>
+                ) : (
+                  <div className="poke-market-state">{loading ? 'Sincronizando cartas…' : 'Selecciona una carta del mercado'}</div>
+                )}
+              </article>
 
-            <aside className="poke-market-panel poke-market-panel--trade">
-              <div className="poke-market-wallet">
-                <div>
-                  <span>Cash</span>
-                  <strong>{formatCurrency(cashBalance)}</strong>
-                </div>
-                <div>
-                  <span>Colección</span>
-                  <strong>{formatCurrency(collectionValue)}</strong>
-                </div>
-              </div>
-
-              {!authUser && (
-                <div className="poke-market-auth-callout">
+              <aside className="poke-market-panel poke-market-panel--trade">
+                <div className="poke-market-wallet">
                   <div>
-                    <strong>Inicia sesión para guardar tu cartera.</strong>
-                  </div>
-                  <button type="button" className="poke-market-btn poke-market-btn--ghost" onClick={onRequestLogin}>
-                    Iniciar sesión
-                  </button>
-                </div>
-              )}
-
-              {feedback && <div className="poke-market-alert poke-market-alert--success">{feedback}</div>}
-              {tradeError && <div className="poke-market-alert poke-market-alert--error">{tradeError}</div>}
-
-              <form className="poke-market-form" onSubmit={handleTradeSubmit}>
-                <label className="poke-market-field">
-                  <span>Activo</span>
-                  <input value={selectedAsset ? `${selectedAsset.name} (${selectedAsset.ticker})` : ''} readOnly />
-                </label>
-
-                <label className="poke-market-field">
-                  <span>Operación</span>
-                  <select value={tradeSide} onChange={(event) => setTradeSide(event.target.value)}>
-                    <option value="buy">Comprar</option>
-                    <option value="sell">Vender</option>
-                  </select>
-                </label>
-
-                <label className="poke-market-field">
-                  <span>Cantidad</span>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={quantity}
-                    onChange={(event) => setQuantity(event.target.value)}
-                    placeholder="Cantidad de cartas"
-                  />
-                </label>
-
-                <div className="poke-market-summary">
-                  <div>
-                    <span>Precio unitario</span>
-                    <strong>{selectedAsset ? formatCurrency(selectedAsset.price) : '--'}</strong>
+                    <span>Cash</span>
+                    <strong>{formatCurrency(cashBalance)}</strong>
                   </div>
                   <div>
-                    <span>Disponibles</span>
-                    <strong>{selectedQuantity}</strong>
-                  </div>
-                  <div>
-                    <span>Total estimado</span>
-                    <strong>{selectedAsset ? formatCurrency(estimatedTotal) : '--'}</strong>
+                    <span>Coleccion</span>
+                    <strong>{formatCurrency(totals.collectionValue)}</strong>
                   </div>
                 </div>
 
-                <button
-                  className="poke-market-btn poke-market-btn--primary poke-market-btn--full"
-                  type="submit"
-                  disabled={!selectedAsset || !portfolioReady}
-                >
-                  {authUser
-                    ? tradeSide === 'buy' ? 'Ejecutar compra' : 'Ejecutar venta'
-                    : 'Inicia sesión para operar'}
-                </button>
-              </form>
-            </aside>
-          </section>
+                {!authUser && (
+                  <div className="poke-market-auth-callout">
+                    <strong>Inicia sesion para operar y guardar tu cartera.</strong>
+                    <button type="button" className="poke-market-btn poke-market-btn--ghost" onClick={onRequestLogin}>
+                      Iniciar sesion
+                    </button>
+                  </div>
+                )}
 
-          <section className="poke-market-section poke-market-panel" id="market-deck">
-            <div className="poke-market-controls poke-market-controls--inline">
-              <div className="poke-market-filter-group">
-                {FILTERS.map((filter) => (
+                {feedback && <div className="poke-market-alert poke-market-alert--success">{feedback}</div>}
+                {tradeError && <div className="poke-market-alert poke-market-alert--error">{tradeError}</div>}
+
+                <form className="poke-market-form" onSubmit={handleTradeSubmit}>
+                  <label className="poke-market-field">
+                    <span>Activo</span>
+                    <select value={selectedAsset?.id ?? ''} onChange={(event) => setSelectedId(Number(event.target.value))}>
+                      {marketAssets.map((asset) => (
+                        <option key={asset.id} value={asset.id}>
+                          {asset.name} · {formatCurrency(asset.price)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="poke-market-field">
+                    <span>Operacion</span>
+                    <select value={tradeSide} onChange={(event) => setTradeSide(event.target.value)}>
+                      <option value="buy">Comprar</option>
+                      <option value="sell">Vender</option>
+                    </select>
+                  </label>
+
+                  <label className="poke-market-field">
+                    <span>Cantidad</span>
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={quantity}
+                      onChange={(event) => setQuantity(event.target.value)}
+                      placeholder="Cantidad de cartas"
+                    />
+                  </label>
+
+                  <div className="poke-market-summary">
+                    <div>
+                      <span>Precio unitario</span>
+                      <strong>{selectedAsset ? formatCurrency(selectedAsset.price) : '--'}</strong>
+                    </div>
+                    <div>
+                      <span>Disponibles</span>
+                      <strong>{selectedQuantity}</strong>
+                    </div>
+                    <div>
+                      <span>Total estimado</span>
+                      <strong>{selectedAsset ? formatCurrency(estimatedTotal) : '--'}</strong>
+                    </div>
+                  </div>
+
                   <button
-                    key={filter.id}
-                    type="button"
-                    className={`poke-market-filter ${activeFilter === filter.id ? 'is-active' : ''}`}
-                    onClick={() => setActiveFilter(filter.id)}
+                    className="poke-market-btn poke-market-btn--primary poke-market-btn--full"
+                    type="submit"
+                    disabled={!selectedAsset || (authUser && !portfolioReady)}
                   >
-                    {filter.label}
+                    {authUser
+                      ? tradeSide === 'buy' ? 'Ejecutar compra' : 'Ejecutar venta'
+                      : 'Inicia sesion para operar'}
                   </button>
-                ))}
-              </div>
-              <input
-                className="poke-market-search"
-                type="search"
-                placeholder="Buscar carta..."
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
-            </div>
+                </form>
 
-            {loading && !marketAssets.length ? (
-              <div className="poke-market-state">Sincronizando cartas desde PokeAPI...</div>
-            ) : filteredAssets.length ? (
-              <div className="pokemon-asset-grid">
-                {filteredAssets.map((asset) => (
-                  <CryptoCard
-                    key={asset.id}
-                    asset={asset}
-                    ownedQuantity={asset.ownedQuantity}
-                    isActive={asset.id === selectedAsset?.id}
-                    onSelect={setSelectedId}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="poke-market-state">No encontramos cartas para ese filtro.</div>
-            )}
-          </section>
+                {authUser && (
+                  <div className="poke-x-swap-card">
+                    <SwapPanel ownedAssets={ownedAssets} allAssets={marketAssets} onSwap={portfolio.swap} />
+                  </div>
+                )}
+              </aside>
+            </section>
+          )}
+
+          {/* --------------------------- INVENTARIO --------------------------- */}
+          {activeTab === 'inventory' && (
+            <InventoryView ownedAssets={ownedAssets} totals={totals} selectedId={selectedId} onSelect={goToTrade} />
+          )}
+
+          {/* --------------------------- ACTIVIDAD ---------------------------- */}
+          {activeTab === 'activity' && <ActivityLog transactions={transactions} />}
+
+          {/* ---------------------------- PERFIL ------------------------------ */}
+          {activeTab === 'profile' && authUser && (
+            <ProfileSettings authUser={authUser} onProfileUpdated={onProfileUpdated} />
+          )}
         </>
       )}
     </main>

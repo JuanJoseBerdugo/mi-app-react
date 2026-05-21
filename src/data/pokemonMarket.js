@@ -1,156 +1,200 @@
-const FEATURED_MARKET_POKEMON = [
-  {
-    id: 493,
-    grade: 'Black Label',
-    headline: 'Oferta ultra limitada y prestigio de museo.',
-    demandMultiplier: 1.46,
-    specialTier: 'mythical',
-  },
-  {
-    id: 384,
-    grade: 'PSA 10',
-    headline: 'Dragón celestial con liquidez global y alta rotación.',
-    demandMultiplier: 1.36,
-    specialTier: 'legendary',
-  },
-  {
-    id: 150,
-    grade: 'PSA 10',
-    headline: 'Blue chip psíquico, histórico en subastas premium.',
-    demandMultiplier: 1.34,
-    specialTier: 'legendary',
-  },
-  {
-    id: 249,
-    grade: 'CGC Pristine',
-    headline: 'Demanda estable, gran refugio en ciclos bajistas.',
-    demandMultiplier: 1.27,
-    specialTier: 'legendary',
-  },
-  {
-    id: 151,
-    grade: 'Gold Star',
-    headline: 'Mítico de colección con fuerte prima nostalgia.',
-    demandMultiplier: 1.3,
-    specialTier: 'mythical',
-  },
-  {
-    id: 6,
-    grade: 'PSA 10',
-    headline: 'Icono masivo del hobby, volumen alto y spread estrecho.',
-    demandMultiplier: 1.28,
-  },
-  {
-    id: 94,
-    grade: 'CGC 9.5',
-    headline: 'Favorito competitivo con momentum de corto plazo.',
-    demandMultiplier: 1.14,
-  },
-  {
-    id: 149,
-    grade: 'BGS 9.5',
-    headline: 'Pseudo-legendario con curva alcista sostenida.',
-    demandMultiplier: 1.17,
-  },
-  {
-    id: 448,
-    grade: 'PSA 9',
-    headline: 'Activo meta con compradores constantes.',
-    demandMultiplier: 1.09,
-  },
-  {
-    id: 130,
-    grade: 'PSA 9',
-    headline: 'Volatilidad media y demanda sólida en retail.',
-    demandMultiplier: 1.08,
-  },
-  {
-    id: 133,
-    grade: 'PSA 10',
-    headline: 'Entrada favorita para coleccionistas y flips rápidos.',
-    demandMultiplier: 1.15,
-  },
-  {
-    id: 25,
-    grade: 'PSA 10',
-    headline: 'El ticker más popular para nuevos compradores.',
-    demandMultiplier: 1.2,
-  },
-];
+// PokeXchange market data.
+// 20 curated "best" Pokemon, each linked 1:1 to a distinct real crypto traded on
+// Coinbase (USD product). The live crypto feed modulates each card's USD value so the
+// exchange tracks real markets while keeping a Pokemon collectible identity.
 
-const GENERATED_GRADES = [
-  'Raw Mint',
-  'PSA 8',
-  'PSA 9',
-  'CGC 9',
-  'BGS 9.5',
-  'Reverse Holo',
-  'First Edition',
-  'Collector Vault',
-];
-
-const GENERATED_HEADLINES = [
-  'Flujo estable de coleccionistas y spread saludable.',
-  'Carta táctica con buen cruce entre nostalgia y rotación.',
-  'Activo retail con demanda orgánica y liquidez constante.',
-  'Pieza de media capitalización con potencial de breakout.',
-  'Interés sólido en marketplace y buen ritmo de transacciones.',
-  'Oferta controlada con rebotes rápidos tras correcciones.',
-  'Carta seguida por coleccionistas de largo plazo y scalpers.',
-  'Volumen equilibrado, ideal para acumular en retrocesos.',
-];
-
+// --- Real crypto reference products (Coinbase Exchange public API ids) ---
 const MARKET_REFERENCE_PRODUCTS = [
-  { id: 'BTC-USD', label: 'Bitcoin' },
-  { id: 'ETH-USD', label: 'Ethereum' },
-  { id: 'SOL-USD', label: 'Solana' },
-  { id: 'XRP-USD', label: 'XRP' },
-  { id: 'ADA-USD', label: 'Cardano' },
-  { id: 'DOGE-USD', label: 'Dogecoin' },
-  { id: 'AVAX-USD', label: 'Avalanche' },
-  { id: 'LINK-USD', label: 'Chainlink' },
+  { id: 'BTC-USD', label: 'Bitcoin', symbol: 'BTC' },
+  { id: 'ETH-USD', label: 'Ethereum', symbol: 'ETH' },
+  { id: 'SOL-USD', label: 'Solana', symbol: 'SOL' },
+  { id: 'ADA-USD', label: 'Cardano', symbol: 'ADA' },
+  { id: 'XRP-USD', label: 'XRP', symbol: 'XRP' },
+  { id: 'AVAX-USD', label: 'Avalanche', symbol: 'AVAX' },
+  { id: 'DOT-USD', label: 'Polkadot', symbol: 'DOT' },
+  { id: 'LINK-USD', label: 'Chainlink', symbol: 'LINK' },
+  { id: 'LTC-USD', label: 'Litecoin', symbol: 'LTC' },
+  { id: 'DOGE-USD', label: 'Dogecoin', symbol: 'DOGE' },
+  { id: 'BCH-USD', label: 'Bitcoin Cash', symbol: 'BCH' },
+  { id: 'ATOM-USD', label: 'Cosmos', symbol: 'ATOM' },
+  { id: 'NEAR-USD', label: 'NEAR', symbol: 'NEAR' },
+  { id: 'UNI-USD', label: 'Uniswap', symbol: 'UNI' },
+  { id: 'SUI-USD', label: 'Sui', symbol: 'SUI' },
+  { id: 'AAVE-USD', label: 'Aave', symbol: 'AAVE' },
+  { id: 'XLM-USD', label: 'Stellar', symbol: 'XLM' },
+  { id: 'ALGO-USD', label: 'Algorand', symbol: 'ALGO' },
+  { id: 'FIL-USD', label: 'Filecoin', symbol: 'FIL' },
+  { id: 'APT-USD', label: 'Aptos', symbol: 'APT' },
 ];
 
 const MARKET_REFERENCE_BY_ID = Object.fromEntries(
   MARKET_REFERENCE_PRODUCTS.map((product) => [product.id, product])
 );
 
-const FEATURED_MARKET_IDS = new Set(FEATURED_MARKET_POKEMON.map((entry) => entry.id));
-
-const ADDITIONAL_MARKET_IDS = Array.from({ length: 151 }, (_, index) => index + 1)
-  .filter((id) => !FEATURED_MARKET_IDS.has(id))
-  .slice(0, 100);
-
-function buildGeneratedMarketEntry(id, index) {
-  return {
-    id,
-    grade: GENERATED_GRADES[index % GENERATED_GRADES.length],
-    headline: GENERATED_HEADLINES[index % GENERATED_HEADLINES.length],
-    demandMultiplier: Number((0.93 + (index % 9) * 0.025 + (id % 5) * 0.012).toFixed(2)),
-  };
-}
-
+// --- The 20 cards: the strongest / most iconic Pokemon, each pinned to one coin ---
 export const MARKET_POKEMON = [
-  ...FEATURED_MARKET_POKEMON,
-  ...ADDITIONAL_MARKET_IDS.map(buildGeneratedMarketEntry),
+  {
+    id: 150,
+    grade: 'PSA 10',
+    headline: 'Blue chip psiquico, el activo de reserva del mercado.',
+    demandMultiplier: 1.46,
+    specialTier: 'legendary',
+    marketProductId: 'BTC-USD',
+  },
+  {
+    id: 384,
+    grade: 'CGC Pristine',
+    headline: 'Dragon celestial con liquidez global y alta rotacion.',
+    demandMultiplier: 1.4,
+    specialTier: 'legendary',
+    marketProductId: 'ETH-USD',
+  },
+  {
+    id: 493,
+    grade: 'Black Label',
+    headline: 'El Pokemon dios: oferta minima, prestigio de museo.',
+    demandMultiplier: 1.52,
+    specialTier: 'mythical',
+    marketProductId: 'SOL-USD',
+  },
+  {
+    id: 151,
+    grade: 'Gold Star',
+    headline: 'Mitico de coleccion con fuerte prima de nostalgia.',
+    demandMultiplier: 1.34,
+    specialTier: 'mythical',
+    marketProductId: 'ADA-USD',
+  },
+  {
+    id: 249,
+    grade: 'CGC 9.5',
+    headline: 'Guardian de los mares, refugio en ciclos bajistas.',
+    demandMultiplier: 1.3,
+    specialTier: 'legendary',
+    marketProductId: 'XRP-USD',
+  },
+  {
+    id: 250,
+    grade: 'PSA 10',
+    headline: 'Ave arcoiris, momentum fuerte tras cada renacer.',
+    demandMultiplier: 1.32,
+    specialTier: 'legendary',
+    marketProductId: 'AVAX-USD',
+  },
+  {
+    id: 483,
+    grade: 'PSA 10',
+    headline: 'Soberano del tiempo con curva alcista sostenida.',
+    demandMultiplier: 1.28,
+    specialTier: 'legendary',
+    marketProductId: 'DOT-USD',
+  },
+  {
+    id: 487,
+    grade: 'CGC 9.5',
+    headline: 'Dragon fantasma del mundo distorsion, alta volatilidad.',
+    demandMultiplier: 1.27,
+    specialTier: 'legendary',
+    marketProductId: 'LINK-USD',
+  },
+  {
+    id: 6,
+    grade: 'PSA 10',
+    headline: 'Icono masivo del hobby, volumen alto y spread estrecho.',
+    demandMultiplier: 1.3,
+    marketProductId: 'LTC-USD',
+  },
+  {
+    id: 25,
+    grade: 'PSA 10',
+    headline: 'La mascota: el ticker mas popular para nuevos compradores.',
+    demandMultiplier: 1.24,
+    marketProductId: 'DOGE-USD',
+  },
+  {
+    id: 149,
+    grade: 'BGS 9.5',
+    headline: 'Pseudo-legendario clasico con demanda constante.',
+    demandMultiplier: 1.18,
+    marketProductId: 'BCH-USD',
+  },
+  {
+    id: 248,
+    grade: 'PSA 9',
+    headline: 'Tanque roca-siniestro, base solida en correcciones.',
+    demandMultiplier: 1.16,
+    marketProductId: 'ATOM-USD',
+  },
+  {
+    id: 445,
+    grade: 'PSA 9',
+    headline: 'Pseudo-legendario meta con compradores agresivos.',
+    demandMultiplier: 1.15,
+    marketProductId: 'NEAR-USD',
+  },
+  {
+    id: 448,
+    grade: 'PSA 9',
+    headline: 'Activo competitivo con momentum de corto plazo.',
+    demandMultiplier: 1.12,
+    marketProductId: 'UNI-USD',
+  },
+  {
+    id: 658,
+    grade: 'CGC 9.5',
+    headline: 'Ninja moderno, favorito de la nueva generacion.',
+    demandMultiplier: 1.14,
+    marketProductId: 'SUI-USD',
+  },
+  {
+    id: 94,
+    grade: 'CGC 9.5',
+    headline: 'Fantasma de culto con base de coleccionistas fiel.',
+    demandMultiplier: 1.12,
+    marketProductId: 'AAVE-USD',
+  },
+  {
+    id: 130,
+    grade: 'PSA 9',
+    headline: 'Serpiente marina, volatilidad media y demanda solida.',
+    demandMultiplier: 1.1,
+    marketProductId: 'XLM-USD',
+  },
+  {
+    id: 143,
+    grade: 'PSA 9',
+    headline: 'Tanque dormilon, acumulacion lenta y constante.',
+    demandMultiplier: 1.08,
+    marketProductId: 'ALGO-USD',
+  },
+  {
+    id: 9,
+    grade: 'PSA 10',
+    headline: 'Fortaleza de agua, entrada favorita para coleccionistas.',
+    demandMultiplier: 1.12,
+    marketProductId: 'FIL-USD',
+  },
+  {
+    id: 3,
+    grade: 'PSA 10',
+    headline: 'Inicial de planta, liquidez retail y rebotes rapidos.',
+    demandMultiplier: 1.12,
+    marketProductId: 'APT-USD',
+  },
 ];
 
 export const COINBASE_PRODUCTS = MARKET_REFERENCE_PRODUCTS;
 
-export const INITIAL_CASH_BALANCE = 100000000;
+// Starter wallet for a freshly registered trainer.
+export const INITIAL_CASH_BALANCE = 10000000;
 
 export const INITIAL_HOLDINGS = {
-  25: 14,
-  133: 10,
+  25: 8,
+  6: 2,
   130: 3,
-  149: 2,
-  94: 3,
-  6: 4,
-  150: 1,
-  151: 1,
-  249: 1,
-  384: 1,
-  493: 1,
+  94: 2,
+  143: 4,
+  149: 1,
 };
 
 const TYPE_COLORS = {
@@ -175,26 +219,40 @@ const TYPE_COLORS = {
 };
 
 const ICONIC_MULTIPLIERS = {
-  6: 1.35,
-  25: 1.22,
-  94: 1.11,
-  130: 1.08,
-  133: 1.16,
-  149: 1.17,
   150: 1.31,
-  151: 1.24,
-  249: 1.18,
-  384: 1.28,
-  448: 1.1,
-  493: 1.34,
+  384: 1.3,
+  493: 1.4,
+  151: 1.26,
+  249: 1.22,
+  250: 1.22,
+  483: 1.24,
+  487: 1.24,
+  6: 1.3,
+  25: 1.2,
+  149: 1.18,
+  248: 1.18,
+  445: 1.16,
+  448: 1.12,
+  658: 1.14,
+  94: 1.12,
+  130: 1.1,
+  143: 1.1,
+  9: 1.12,
+  3: 1.12,
 };
 
-const PSEUDO_LEGENDARY_IDS = new Set([149, 248, 373, 376, 445, 635, 706, 784, 887]);
+const PSEUDO_LEGENDARY_IDS = new Set([149, 248, 445]);
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 0,
+});
+
+const preciseCurrencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 2,
 });
 
 const compactFormatter = new Intl.NumberFormat('en-US', {
@@ -206,6 +264,10 @@ const integerFormatter = new Intl.NumberFormat('en-US');
 
 export function formatCurrency(value) {
   return currencyFormatter.format(value);
+}
+
+export function formatPreciseCurrency(value) {
+  return preciseCurrencyFormatter.format(value);
 }
 
 export function formatCompactNumber(value) {
@@ -248,7 +310,7 @@ function getPricePalette(types) {
 }
 
 function getSentimentLabel(changePct) {
-  return changePct >= 1.8 ? 'Alcista' : changePct <= -1.6 ? 'Bajista' : 'Acumulación';
+  return changePct >= 1.8 ? 'Alcista' : changePct <= -1.6 ? 'Bajista' : 'Acumulacion';
 }
 
 function getReferenceProduct(types, isLegendary, isMythical, pokemonId) {
@@ -467,6 +529,7 @@ export function buildMarketAsset(pokemon, species, meta) {
     palette,
     referenceProductId: referenceProduct.id,
     referenceProductLabel: referenceProduct.label,
+    referenceProductSymbol: referenceProduct.symbol,
     marketBeta,
   };
 }
@@ -532,6 +595,8 @@ export function applyLiveMarketSnapshot(asset, liveStat, anchorStat) {
     demandScore,
     rarityTone,
     sentimentLabel: getSentimentLabel(changePct),
+    cryptoLast: last,
+    cryptoChangePct: Number(dayChangePct.toFixed(2)),
     lastSyncedAt: liveStat.fetchedAt ?? Date.now(),
   };
 }

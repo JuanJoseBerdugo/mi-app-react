@@ -143,3 +143,10 @@ using (
   and (storage.foldername(name))[1] = 'profiles'
   and (storage.foldername(name))[2] = auth.uid()::text
 );
+
+-- Migration: add crypto profile fields
+-- Run this block if the table already exists without these columns.
+alter table public.pokemon_profiles
+  add column if not exists favorite_crypto text not null default 'BTC',
+  add column if not exists country text not null default '',
+  add column if not exists base_currency text not null default 'USD';

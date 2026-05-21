@@ -2,10 +2,9 @@ import { supabase } from '../lib/supabase';
 
 const PROFILE_TABLE = 'pokemon_profiles';
 const AVATAR_BUCKET = 'avatars';
-const DEFAULT_XP_RANK = 1000;
 
 function getDisplayNameFallback(user) {
-  return user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'Pokemon Trainer';
+  return user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'Trader';
 }
 
 function normalizeProfile(user, profile = null) {
@@ -15,7 +14,9 @@ function normalizeProfile(user, profile = null) {
     displayName: profile?.display_name || getDisplayNameFallback(user),
     avatarUrl: profile?.avatar_url || user.user_metadata?.avatar_url || '',
     avatarPath: profile?.avatar_path || user.user_metadata?.avatar_path || '',
-    xpRank: Number(profile?.xp_rank || user.user_metadata?.xp_rank || DEFAULT_XP_RANK),
+    favoriteCrypto: profile?.favorite_crypto || user.user_metadata?.favorite_crypto || 'BTC',
+    country: profile?.country || user.user_metadata?.country || '',
+    baseCurrency: profile?.base_currency || user.user_metadata?.base_currency || 'USD',
   };
 }
 
@@ -37,7 +38,7 @@ export async function getPokemonProfile(user) {
 
   const { data, error } = await supabase
     .from(PROFILE_TABLE)
-    .select('id, email, display_name, xp_rank, avatar_path, avatar_url')
+    .select('id, email, display_name, avatar_path, avatar_url, favorite_crypto, country, base_currency')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -56,11 +57,13 @@ export async function getPokemonProfile(user) {
         id: user.id,
         email: user.email,
         display_name: fallbackProfile.displayName,
-        xp_rank: fallbackProfile.xpRank,
+        favorite_crypto: fallbackProfile.favoriteCrypto,
+        country: fallbackProfile.country,
+        base_currency: fallbackProfile.baseCurrency,
       },
       { onConflict: 'id' }
     )
-    .select('id, email, display_name, xp_rank, avatar_path, avatar_url')
+    .select('id, email, display_name, avatar_path, avatar_url, favorite_crypto, country, base_currency')
     .single();
 
   if (createError) {
@@ -75,7 +78,9 @@ export async function savePokemonProfile(currentUser, profileInput) {
     id: currentUser.id,
     email: currentUser.email,
     display_name: profileInput.displayName,
-    xp_rank: profileInput.xpRank,
+    favorite_crypto: profileInput.favoriteCrypto,
+    country: profileInput.country,
+    base_currency: profileInput.baseCurrency,
     updated_at: new Date().toISOString(),
   };
 
@@ -90,7 +95,7 @@ export async function savePokemonProfile(currentUser, profileInput) {
   const { data, error } = await supabase
     .from(PROFILE_TABLE)
     .upsert(payload, { onConflict: 'id' })
-    .select('id, email, display_name, xp_rank, avatar_path, avatar_url')
+    .select('id, email, display_name, avatar_path, avatar_url, favorite_crypto, country, base_currency')
     .single();
 
   if (error) {
@@ -102,7 +107,9 @@ export async function savePokemonProfile(currentUser, profileInput) {
       display_name: data.display_name,
       avatar_url: data.avatar_url,
       avatar_path: data.avatar_path,
-      xp_rank: data.xp_rank,
+      favorite_crypto: data.favorite_crypto,
+      country: data.country,
+      base_currency: data.base_currency,
     },
   });
 

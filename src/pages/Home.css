@@ -5,25 +5,29 @@ html {
 }
 
 .poke-market-page {
-  --surface: #07101f;
-  --surface-2: #0d1728;
-  --surface-3: rgba(15, 24, 40, 0.88);
-  --surface-4: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.1);
-  --text: #eef4ff;
-  --muted: #9fb0cf;
-  --green: #42e59f;
-  --red: #ff7d8b;
+  --surface: #0c0a06;
+  --surface-2: #161009;
+  --surface-3: rgba(26, 18, 8, 0.9);
+  --surface-4: rgba(255, 200, 110, 0.06);
+  --border: rgba(255, 196, 77, 0.14);
+  --text: #fff6e6;
+  --muted: #c9ad84;
+  --amber: #ffc24d;
+  --orange: #ff9d2f;
+  --orange-deep: #ff6a00;
+  --green: #5ee0a0;
+  --red: #ff7d6b;
   min-height: calc(100vh - 64px);
   padding: 36px 0 72px;
   position: relative;
   overflow: hidden;
   color: var(--text);
+  font-variant-numeric: tabular-nums;
   background:
-    radial-gradient(circle at top left, rgba(66, 229, 159, 0.12), transparent 28%),
-    radial-gradient(circle at top right, rgba(107, 180, 255, 0.18), transparent 32%),
-    radial-gradient(circle at bottom center, rgba(255, 197, 82, 0.12), transparent 30%),
-    linear-gradient(180deg, #050b16 0%, #081223 35%, #050b14 100%);
+    radial-gradient(circle at top left, rgba(255, 154, 47, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.16), transparent 32%),
+    radial-gradient(circle at bottom center, rgba(255, 194, 77, 0.12), transparent 30%),
+    linear-gradient(180deg, #0a0703 0%, #130d05 40%, #080502 100%);
   font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
 }
 
@@ -41,7 +45,7 @@ html {
   height: 340px;
   top: -90px;
   left: -140px;
-  background: radial-gradient(circle, rgba(255, 124, 104, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 106, 0, 0.24), transparent 70%);
 }
 
 .poke-market-page::after {
@@ -49,7 +53,7 @@ html {
   height: 420px;
   right: -150px;
   top: 160px;
-  background: radial-gradient(circle, rgba(123, 231, 255, 0.18), transparent 72%);
+  background: radial-gradient(circle, rgba(255, 194, 77, 0.18), transparent 72%);
 }
 
 .poke-market-section {
@@ -202,8 +206,8 @@ html {
 }
 
 .poke-market-btn--ghost {
-  color: #d6e5ff;
-  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffe7c4;
+  border-color: rgba(255, 196, 77, 0.22);
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -248,8 +252,8 @@ html {
   border-radius: 28px;
   padding: 28px;
   background:
-    radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.18), transparent 34%),
-    linear-gradient(145deg, rgba(15, 24, 40, 0.94), rgba(10, 18, 31, 0.9));
+    radial-gradient(circle at bottom left, rgba(255, 154, 47, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(26, 18, 8, 0.94), rgba(18, 12, 5, 0.9));
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
 }
 
@@ -326,12 +330,12 @@ html {
   width: 58px;
   height: 58px;
   border-radius: 16px;
-  border: 4px solid #06101d;
-  background: #38bdf8;
+  border: 4px solid #0a0703;
+  background: var(--orange);
   display: grid;
   place-items: center;
   cursor: pointer;
-  box-shadow: 0 12px 26px rgba(56, 189, 248, 0.28);
+  box-shadow: 0 12px 26px rgba(255, 154, 47, 0.32);
 }
 
 .poke-profile-camera span {
@@ -363,7 +367,7 @@ html {
   left: 8px;
   top: 5px;
   border-radius: 50%;
-  background: #38bdf8;
+  background: var(--orange);
 }
 
 .poke-profile-file {
@@ -417,8 +421,36 @@ html {
 }
 
 .poke-profile-field input:focus {
-  border-color: rgba(56, 189, 248, 0.46);
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.08);
+  border-color: rgba(255, 194, 77, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 162, 47, 0.12);
+}
+
+.poke-profile-select {
+  min-height: 58px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  outline: none;
+  padding: 0 24px;
+  font: inherit;
+  font-size: 1rem;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffc24d' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+}
+
+.poke-profile-select:focus {
+  border-color: rgba(255, 194, 77, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 162, 47, 0.12);
+}
+
+.poke-profile-select option {
+  background: #1a1208;
+  color: var(--text);
 }
 
 .poke-profile-submit {
@@ -426,14 +458,14 @@ html {
   min-height: 64px;
   border: none;
   border-radius: 24px;
-  background: #38bdf8;
-  color: #06101d;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--orange-deep) 100%);
+  color: #0a0703;
   cursor: pointer;
   font-weight: 900;
   text-transform: uppercase;
   font-size: 1rem;
   letter-spacing: 0.02em;
-  box-shadow: 0 18px 34px rgba(56, 189, 248, 0.24);
+  box-shadow: 0 18px 34px rgba(255, 122, 0, 0.28);
 }
 
 .poke-profile-submit:disabled {
@@ -717,7 +749,7 @@ html {
   font-weight: 700;
   letter-spacing: 0.12em;
   font-size: 0.82rem;
-  color: #d9e7ff;
+  color: #ffe7c4;
 }
 
 .poke-market-collector-card__headline,
@@ -921,8 +953,8 @@ html {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #6de8ff 0%, #ffd45a 100%);
-  box-shadow: 0 0 18px rgba(109, 232, 255, 0.3);
+  background: linear-gradient(90deg, var(--orange-deep) 0%, var(--amber) 100%);
+  box-shadow: 0 0 18px rgba(255, 122, 0, 0.32);
 }
 
 .poke-market-portfolio-panel {
@@ -1131,8 +1163,8 @@ html {
 .poke-market-field input:focus,
 .poke-market-field select:focus,
 .poke-market-search:focus {
-  border-color: rgba(123, 231, 255, 0.48);
-  box-shadow: 0 0 0 4px rgba(123, 231, 255, 0.08);
+  border-color: rgba(255, 194, 77, 0.55);
+  box-shadow: 0 0 0 4px rgba(255, 162, 47, 0.12);
   background: rgba(255, 255, 255, 0.07);
 }
 
@@ -1163,7 +1195,7 @@ html {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
-  color: #d8e4fb;
+  color: #e9d8b8;
   padding: 10px 14px;
   cursor: pointer;
   font: inherit;
@@ -1175,8 +1207,9 @@ html {
 }
 
 .poke-market-filter.is-active {
-  border-color: rgba(123, 231, 255, 0.4);
-  background: rgba(123, 231, 255, 0.14);
+  border-color: rgba(255, 194, 77, 0.45);
+  background: rgba(255, 162, 47, 0.16);
+  color: #fff;
 }
 
 .pokemon-asset-grid {
@@ -1197,8 +1230,8 @@ html {
 .pokemon-asset-card:hover,
 .pokemon-asset-card.is-active {
   transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.28), 0 0 22px var(--asset-glow, rgba(123, 231, 255, 0.14));
+  border-color: rgba(255, 196, 77, 0.3);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.28), 0 0 22px var(--asset-glow, rgba(255, 162, 47, 0.18));
 }
 
 .pokemon-asset-card__art {
@@ -1435,4 +1468,749 @@ html {
   .poke-market-stats-bar > div:first-child {
     width: auto;
   }
+}
+
+/* ============================ PokeXchange shell ============================ */
+
+.poke-x-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 20px 26px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 154, 47, 0.18), transparent 38%),
+    linear-gradient(140deg, rgba(26, 18, 8, 0.95), rgba(14, 9, 4, 0.92));
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
+}
+
+.poke-x-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.poke-x-brand__logo {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #0a0703;
+  background: linear-gradient(135deg, var(--orange-deep) 0%, var(--amber) 100%);
+  box-shadow: 0 12px 26px rgba(255, 122, 0, 0.34);
+}
+
+.poke-x-brand h1 {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.poke-x-brand p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 4px 0 0;
+}
+
+.poke-x-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.poke-x-stat {
+  min-width: 130px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.poke-x-stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.poke-x-stat strong {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: 1.15rem;
+}
+
+.poke-x-stat--sync {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.poke-x-sync {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.poke-x-sync.is-cloud {
+  color: var(--green);
+}
+
+.poke-x-sync.is-local {
+  color: #ffd45a;
+}
+
+.poke-x-stat--sync small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+/* --- Live crypto ticker --- */
+.poke-x-ticker {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(7, 14, 24, 0.86);
+}
+
+.poke-x-ticker__tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ffe0ad;
+  background: rgba(255, 162, 47, 0.14);
+  border-right: 1px solid var(--border);
+}
+
+.poke-x-ticker__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #5d6b85;
+}
+
+.poke-x-ticker__dot.is-live {
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(66, 229, 159, 0.6);
+  animation: tickerPulse 1.8s ease-out infinite;
+}
+
+@keyframes tickerPulse {
+  to {
+    box-shadow: 0 0 0 9px rgba(66, 229, 159, 0);
+  }
+}
+
+.poke-x-ticker__viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.poke-x-ticker__track {
+  display: inline-flex;
+  gap: 28px;
+  padding: 12px 24px;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.poke-x-ticker__track.is-animated {
+  animation: tickerScroll 48s linear infinite;
+}
+
+.poke-x-ticker__viewport:hover .poke-x-ticker__track.is-animated {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.poke-x-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+}
+
+.poke-x-ticker__item strong {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.poke-x-ticker__price {
+  color: #e8cfa3;
+}
+
+/* --- Tab bar --- */
+.poke-x-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--border);
+}
+
+.poke-x-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #e9d8b8;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.poke-x-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.poke-x-tab.is-active {
+  background: linear-gradient(135deg, rgba(255, 154, 47, 0.24), rgba(255, 194, 77, 0.18));
+  border-color: rgba(255, 194, 77, 0.45);
+  color: #fff;
+}
+
+.poke-x-tab__icon {
+  font-size: 1.05rem;
+}
+
+.poke-x-tab__badge {
+  min-width: 22px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.74rem;
+  text-align: center;
+}
+
+/* --- Section headers (reused across tabs) --- */
+.poke-x-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.poke-x-section-title {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  margin: 0;
+}
+
+.poke-x-section-sub {
+  color: var(--muted);
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+}
+
+/* --- Market spotlight --- */
+.poke-x-spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.6fr);
+  gap: 18px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 30px;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--spot-accent, #ffc24d) 26%, transparent), transparent 46%),
+    linear-gradient(140deg, rgba(26, 18, 8, 0.94), rgba(14, 9, 4, 0.92));
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+}
+
+.poke-x-spotlight__info h2 {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin: 14px 0 8px;
+}
+
+.poke-x-spotlight__info p {
+  color: var(--muted);
+  max-width: 48ch;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.poke-x-spotlight__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.poke-x-spotlight__metrics span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.poke-x-spotlight__metrics strong {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: 1.3rem;
+}
+
+.poke-x-spotlight img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 34px rgba(0, 0, 0, 0.4));
+}
+
+/* --- Linked-coin chips --- */
+.pokemon-asset-card__coin {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #06101d;
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 8px;
+  padding: 3px 7px;
+}
+
+.poke-x-coin-chip {
+  background: linear-gradient(135deg, rgba(255, 154, 47, 0.26), rgba(255, 194, 77, 0.2)) !important;
+  border-color: rgba(255, 194, 77, 0.45) !important;
+  font-weight: 700;
+}
+
+/* --- Inventory --- */
+.poke-x-inv-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.poke-x-inv-summary .poke-market-metric small {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.poke-x-alloc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.poke-x-alloc__row {
+  display: grid;
+  grid-template-columns: 42px minmax(120px, 1.2fr) minmax(0, 2fr) 56px;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.poke-x-alloc__row:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.poke-x-alloc__row img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.poke-x-alloc__info strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.poke-x-alloc__info span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.poke-x-alloc__bar {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.poke-x-alloc__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.poke-x-alloc__pct {
+  text-align: right;
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: 0.92rem;
+}
+
+.poke-x-inv-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.poke-x-inv-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.poke-x-inv-card__stats div {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.poke-x-inv-card__stats span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.66rem;
+  margin-bottom: 3px;
+}
+
+.poke-x-inv-card__stats strong {
+  font-size: 0.82rem;
+}
+
+/* --- Swap --- */
+.poke-x-swap-card {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.poke-x-swap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.poke-x-swap__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.poke-x-swap__head h3 {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.poke-x-swap__head span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.poke-x-swap__arrow {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--orange);
+}
+
+.poke-x-swap__preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.poke-x-swap__preview div {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.poke-x-swap__preview span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  margin-bottom: 4px;
+}
+
+.poke-x-swap__preview strong {
+  font-size: 0.95rem;
+}
+
+/* --- Activity log --- */
+.poke-x-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.poke-x-activity-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.poke-x-activity-badge {
+  text-align: center;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.poke-x-activity-badge.is-buy {
+  color: var(--green);
+  background: rgba(66, 229, 159, 0.12);
+  border-color: rgba(66, 229, 159, 0.22);
+}
+
+.poke-x-activity-badge.is-sell {
+  color: var(--red);
+  background: rgba(255, 125, 139, 0.12);
+  border-color: rgba(255, 125, 139, 0.22);
+}
+
+.poke-x-activity-badge.is-swap-out,
+.poke-x-activity-badge.is-swap-in {
+  color: var(--amber);
+  background: rgba(255, 162, 47, 0.12);
+  border-color: rgba(255, 162, 47, 0.24);
+}
+
+.poke-x-activity-main strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.poke-x-activity-main span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.poke-x-activity-meta {
+  text-align: right;
+}
+
+.poke-x-activity-meta strong {
+  display: block;
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+.poke-x-activity-meta strong.is-buy {
+  color: var(--red);
+}
+
+.poke-x-activity-meta strong.is-sell {
+  color: var(--green);
+}
+
+.poke-x-activity-meta strong.is-swap-out,
+.poke-x-activity-meta strong.is-swap-in {
+  color: #ffe0ad;
+}
+
+.poke-x-activity-meta span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1140px) {
+  .poke-x-inv-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .poke-x-spotlight {
+    grid-template-columns: 1fr;
+  }
+
+  .poke-x-spotlight img {
+    max-height: 200px;
+    order: -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .poke-x-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .poke-x-stats {
+    justify-content: space-between;
+  }
+
+  .poke-x-stat {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .poke-x-inv-summary,
+  .poke-x-swap__preview {
+    grid-template-columns: 1fr;
+  }
+
+  .poke-x-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 12px 14px;
+  }
+
+  .poke-x-alloc__row {
+    grid-template-columns: 36px 1fr 48px;
+  }
+
+  .poke-x-alloc__bar {
+    display: none;
+  }
+
+  .poke-x-activity-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .poke-x-activity-badge {
+    justify-self: start;
+    padding: 6px 12px;
+  }
+
+  .poke-x-activity-meta {
+    text-align: left;
+  }
+}
+
+/* ===================== Text overflow safety net ===================== */
+
+/* Long currency values must wrap inside their box, never spill out. */
+.poke-x-stat strong,
+.poke-market-wallet strong,
+.poke-market-summary strong,
+.poke-x-swap__preview strong,
+.poke-x-inv-card__stats strong,
+.poke-x-activity-meta strong,
+.poke-x-spotlight__metrics strong,
+.poke-market-collector-card__headline strong,
+.pokemon-asset-card__headline strong {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.poke-x-stat strong {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+/* Card price can drop to its own line instead of pushing past the edge. */
+.poke-market-collector-card__headline,
+.pokemon-asset-card__headline {
+  flex-wrap: wrap;
+}
+
+.poke-market-collector-card__headline > div,
+.pokemon-asset-card__headline > div {
+  min-width: 0;
+  flex: 1 1 120px;
+}
+
+.poke-market-collector-card__headline strong,
+.pokemon-asset-card__headline strong {
+  white-space: normal;
+}
+
+.poke-market-collector-card__headline h3,
+.pokemon-asset-card__headline h3 {
+  overflow-wrap: anywhere;
+}
+
+/* Trade panel: label + value rows shrink cleanly on narrow widths. */
+.poke-market-wallet div,
+.poke-market-summary div,
+.poke-x-swap__preview div,
+.poke-x-inv-card__stats div {
+  min-width: 0;
+}
+
+/* Activity rows keep ticker + value readable without clipping. */
+.poke-x-activity-main {
+  min-width: 0;
+}
+
+.poke-x-activity-main strong,
+.poke-x-activity-main span {
+  overflow-wrap: anywhere;
+}
+
+.poke-x-activity-row {
+  align-items: stretch;
+}
+
+/* Ticker chips never compress their own text. */
+.poke-x-ticker__item {
+  flex-shrink: 0;
+}
+
+/* Detail-panel stats + chart numbers wrap instead of clipping. */
+.poke-market-stat-grid article,
+.market-chart__footer div {
+  min-width: 0;
+}
+
+.poke-market-stat-grid strong,
+.poke-market-stat-grid small,
+.market-chart__footer strong {
+  overflow-wrap: anywhere;
+}
+
+.market-chart__guides span {
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
 }

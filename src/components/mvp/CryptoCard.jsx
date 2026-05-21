@@ -25,6 +25,11 @@ function CryptoCard({ asset, ownedQuantity, isActive, onSelect }) {
       <div className="pokemon-asset-card__art">
         <img src={asset.image} alt={asset.name} loading="lazy" />
         <span className="pokemon-asset-card__ticker">{asset.ticker}</span>
+        {asset.referenceProductSymbol && (
+          <span className="pokemon-asset-card__coin" title={`Enlazado a ${asset.referenceProductLabel}`}>
+            ◎ {asset.referenceProductSymbol}
+          </span>
+        )}
       </div>
 
       <div className="pokemon-asset-card__body">

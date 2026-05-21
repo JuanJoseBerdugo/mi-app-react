@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l src/pages/Home.css src/pages/NexusCrypto.jsx src/index.css src/App.css)",
+      "Bash(ls -la .env*)",
+      "Bash(cat .env.example)",
+      "Bash(npm run *)",
+      "Bash(npx eslint *)"
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
+  }
+}

@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { savePokemonProfile, uploadPokemonAvatar } from '../../services/ProfileService';
 
+const CRYPTO_OPTIONS = [
+  'BTC', 'ETH', 'SOL', 'XRP', 'AVAX', 'BNB', 'DOGE', 'LINK',
+  'DOT', 'MATIC', 'LTC', 'ADA', 'ATOM', 'BCH', 'UNI',
+];
+
+const CURRENCY_OPTIONS = ['USD', 'EUR', 'COP', 'MXN', 'ARS', 'BRL', 'GBP'];
+
 function ProfileSettings({ authUser, onProfileUpdated }) {
   const [displayName, setDisplayName] = useState(authUser.displayName || '');
-  const [xpRank, setXpRank] = useState(String(authUser.xpRank || 1000));
+  const [favoriteCrypto, setFavoriteCrypto] = useState(authUser.favoriteCrypto || 'BTC');
+  const [country, setCountry] = useState(authUser.country || '');
+  const [baseCurrency, setBaseCurrency] = useState(authUser.baseCurrency || 'USD');
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [saving, setSaving] = useState(false);
@@ -13,7 +22,9 @@ function ProfileSettings({ authUser, onProfileUpdated }) {
 
   useEffect(() => {
     setDisplayName(authUser.displayName || '');
-    setXpRank(String(authUser.xpRank || 1000));
+    setFavoriteCrypto(authUser.favoriteCrypto || 'BTC');
+    setCountry(authUser.country || '');
+    setBaseCurrency(authUser.baseCurrency || 'USD');
     setSelectedFile(null);
     setPreviewUrl('');
     setMessage('');
@@ -44,15 +55,10 @@ function ProfileSettings({ authUser, onProfileUpdated }) {
     event.preventDefault();
 
     const cleanName = displayName.trim();
-    const cleanRank = Number(xpRank);
+    const cleanCountry = country.trim();
 
     if (!cleanName) {
-      setError('El nombre del piloto es obligatorio.');
-      return;
-    }
-
-    if (!Number.isFinite(cleanRank) || cleanRank < 0) {
-      setError('El XP Rank debe ser un numero positivo.');
+      setError('El nombre de usuario es obligatorio.');
       return;
     }
 
@@ -69,7 +75,9 @@ function ProfileSettings({ authUser, onProfileUpdated }) {
 
       const updatedProfile = await savePokemonProfile(authUser, {
         displayName: cleanName,
-        xpRank: Math.floor(cleanRank),
+        favoriteCrypto,
+        country: cleanCountry,
+        baseCurrency,
         ...avatarPayload,
       });
 
@@ -127,23 +135,44 @@ function ProfileSettings({ authUser, onProfileUpdated }) {
           <h2 id="profile-settings-title">Configuracion del perfil</h2>
           <div className="poke-profile-field-grid">
             <label className="poke-profile-field">
-              <span>Pilot name</span>
+              <span>Nombre de usuario</span>
               <input
                 value={displayName}
                 onChange={(event) => setDisplayName(event.target.value)}
-                placeholder="Nombre..."
+                placeholder="Tu nombre..."
               />
             </label>
             <label className="poke-profile-field">
-              <span>XP Rank</span>
+              <span>Cripto favorita</span>
+              <select
+                value={favoriteCrypto}
+                onChange={(event) => setFavoriteCrypto(event.target.value)}
+                className="poke-profile-select"
+              >
+                {CRYPTO_OPTIONS.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </label>
+            <label className="poke-profile-field">
+              <span>País</span>
               <input
-                type="number"
-                min="0"
-                step="1"
-                value={xpRank}
-                onChange={(event) => setXpRank(event.target.value)}
-                placeholder="1000"
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
+                placeholder="Tu país..."
               />
+            </label>
+            <label className="poke-profile-field">
+              <span>Moneda base</span>
+              <select
+                value={baseCurrency}
+                onChange={(event) => setBaseCurrency(event.target.value)}
+                className="poke-profile-select"
+              >
+                {CURRENCY_OPTIONS.map((cur) => (
+                  <option key={cur} value={cur}>{cur}</option>
+                ))}
+              </select>
             </label>
           </div>
 
